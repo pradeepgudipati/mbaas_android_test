@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <RelativeLayout 
+            android:layout_width="match_parent"
+    		android:layout_height="match_parent" >
+
+		    <EditText
+		        android:id="@+id/users_update_username_field"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_alignParentTop="true"
+		        android:layout_marginTop="20dp"
+		        android:ems="10"
+		        android:hint="Username" 
+		        android:text="Loading, please wait..."
+		        android:inputType="text" >
+		
+		        <requestFocus />
+		    </EditText>
+		
+		    <EditText
+		        android:id="@+id/users_update_password_field"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_below="@+id/users_update_username_field"
+		        android:layout_marginTop="20dp"
+		        android:ems="10"
+		        android:hint="Password"
+		        android:inputType="textPassword" />
+		    
+		    <EditText
+		        android:id="@+id/users_update_password_conf_field"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_below="@+id/users_update_password_field"
+		        android:layout_marginTop="20dp"
+		        android:ems="10"
+		        android:hint="Confirm Password"
+		        android:inputType="textPassword" />
+		    
+		    <EditText
+		        android:id="@+id/users_update_first_name_field"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_below="@+id/users_update_password_conf_field"
+		        android:layout_marginTop="20dp"
+		        android:ems="10"
+		        android:hint="First Name"
+		        android:inputType="text" />
+		    
+		    <EditText
+		        android:id="@+id/users_update_last_name_field"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_below="@+id/users_update_first_name_field"
+		        android:layout_marginTop="20dp"
+		        android:ems="10"
+		        android:hint="Last Name"
+		        android:inputType="text" />
+		    
+		    <EditText
+		        android:id="@+id/users_update_email_field"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_below="@+id/users_update_last_name_field"
+		        android:layout_marginTop="20dp"
+		        android:ems="10"
+		        android:hint="Email"
+		        android:inputType="text" />
+		    
+		    <EditText
+		        android:id="@+id/users_update_tags_field"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_below="@+id/users_update_email_field"
+		        android:layout_marginTop="20dp"
+		        android:ems="10"
+		        android:hint="Tags (csv)"
+		        android:inputType="text" />
+		
+		    <Button
+		        android:id="@+id/users_update_button1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/users_update_tags_field"
+		        android:layout_centerHorizontal="true"
+		        android:layout_marginTop="20dp"
+		        android:text="Update" />
+		
+		
+		</RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

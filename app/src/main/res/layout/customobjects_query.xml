@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/customobjects_query_class_name_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Class Name" 
+        android:inputType="text" >
+
+        <requestFocus />
+    </EditText>
+    
+    <Button
+        android:id="@+id/customobjects_query_query_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/customobjects_query_class_name_field"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Query" />
+    
+    <TextView
+        android:id="@+id/customobjects_query_status_textView"
+        android:text="Loading, please wait..."
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/customobjects_query_query_button"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+    
+    <ListView
+        android:id="@+id/customobjects_query_listView"
+        android:layout_below="@+id/customobjects_query_status_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:layout_alignParentLeft="true" >
+
+    </ListView>
+
+</RelativeLayout>

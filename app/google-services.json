@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "127869007514",
+    "firebase_url": "https://arrowmbaas.firebaseio.com",
+    "project_id": "arrowmbaas",
+    "storage_bucket": "arrowmbaas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127869007514:android:0dea2586ded8fe13",
+        "android_client_info": {
+          "package_name": "com.example.axway.mbaas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127869007514-h5smu90horm159v1t4cp7pdgcb5ma5fm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.axway.mbaas",
+            "certificate_hash": "11e67a8b33c2643bb57719fe9eb5fc5cc5827079"
+          }
+        },
+        {
+          "client_id": "127869007514-3gehmiq8tdii37r29ns5m5tah6l921qq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6Vcih36YY2T1AJxN87IixwxOk7jg6Tv4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127869007514-3gehmiq8tdii37r29ns5m5tah6l921qq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

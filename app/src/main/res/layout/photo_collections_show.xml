@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" >
+
+	<Button
+	    android:id="@+id/photo_collections_show_show_photos_button1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="22dp"
+	    android:text="Show Photos" />
+
+	<Button
+	    android:id="@+id/photo_collections_show_show_subcollections_button2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/photo_collections_show_show_photos_button1"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="16dp"
+	    android:text="Show Subcollections" />
+	
+	<Button
+	    android:id="@+id/photo_collections_show_update_button3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/photo_collections_show_show_subcollections_button2"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="16dp"
+	    android:text="Update" />
+	
+	<Button
+	    android:id="@+id/photo_collections_show_remove_button4"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/photo_collections_show_update_button3"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="16dp"
+	    android:text="Remove" />
+
+	<TextView
+		android:id="@+id/photo_collections_show_text_view"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/photo_collections_show_remove_button4"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true"
+		android:layout_marginTop="10dp"
+		android:clickable="false"
+		android:ems="10"
+		android:focusable="false"
+		android:focusableInTouchMode="false"
+		android:text="Loading, please wait..." >
+
+	</TextView>
+	
+</RelativeLayout>

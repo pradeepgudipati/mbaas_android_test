@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" >
+
+	<ScrollView
+		android:id="@+id/scrollView1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true" >
+
+		<RelativeLayout 
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" >
+
+			<EditText
+				android:id="@+id/geofences_create_name_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_marginTop="20dp"
+				android:layout_centerHorizontal="true"
+				android:ems="10"
+				android:hint="name"
+				android:inputType="text" />
+			
+			<EditText
+				android:id="@+id/geofences_create_latitude_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/geofences_create_name_field"
+				android:layout_marginTop="20dp"
+				android:layout_centerHorizontal="true"
+				android:ems="10"
+				android:hint="latitude"
+				android:inputType="numberSigned|numberDecimal" />
+			
+			<EditText
+				android:id="@+id/geofences_create_longitude_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/geofences_create_latitude_field"
+				android:layout_marginTop="20dp"
+				android:layout_centerHorizontal="true"
+				android:ems="10"
+				android:hint="longitude"
+				android:inputType="numberSigned|numberDecimal" />
+			
+			<EditText
+				android:id="@+id/geofences_create_radius_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/geofences_create_longitude_field"
+				android:layout_marginTop="20dp"
+				android:layout_centerHorizontal="true"
+				android:ems="10"
+				android:hint="radius"
+				android:inputType="text" />
+
+			<Button
+				android:id="@+id/geofences_create_button1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/geofences_create_radius_field"
+				android:layout_marginTop="20dp"
+				android:layout_centerHorizontal="true"
+				android:text="Create" />
+
+
+		</RelativeLayout>
+	</ScrollView>
+
+</RelativeLayout>
+
+

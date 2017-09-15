@@ -1,0 +1,258 @@
+{
+    Users: {
+        packageName: '.users',
+        rows: [
+            'Create User',
+            'Login User',
+            'Show Current User',
+            'Update Current User',
+            'Remove User',
+            'Logout Current User',
+            'Query User'
+        ],
+        methodsDict: {
+            'Create User'         : 'UsersCreate',
+            'Login User'          : 'UsersLogin',
+            'Show Current User'   : 'UsersShowMe',
+            'Update Current User' : 'UsersUpdate',
+            'Remove User'         : 'UsersRemove',
+            'Logout Current User' : 'UsersLogout',
+            'Query User'          : 'UsersQuery'
+        }
+    },
+    'Access Control Lists': {
+        packageName: '.accessControlLists',
+        rows: [
+            'Create ACL',
+            'Show ACL',
+            'Update Users in ACL',
+            'Check Permission of ACL'
+        ],
+        methodsDict: {
+            'Create ACL': 'AccessControlListsCreate',
+            'Show ACL': 'AccessControlListsShow',
+            'Update Users in ACL': 'AccessControlListsUpdateUsers',
+            'Check Permission of ACL': 'AccessControlListsCheckPermission'
+        }
+    },
+    Chats: {
+        packageName: '.chats',
+        className: 'Chats'
+    },
+    'Push Notifications': {
+        packageName: '.pushNotifications',
+        rows: [
+            'Push Subscription',
+            'Push Notify',
+            'Push Unsubscribe',
+            'Push Subscription Query',
+            'Query Channels'
+        ],
+        methodsDict: {
+            'Push Subscription'   : 'PushSubscribe',
+            'Push Notify'         : 'PushNotify',
+            'Push Unsubscribe'    : 'PushUnsubscribe',
+            'Push Subscription Query': 'PushQuery',
+            'Query Channels'      : 'QueryChannels'
+        }
+    },
+    'Push Schedules': {
+        packageName: '.pushNotifications',
+        className: 'PushSchedules'
+    },
+    Checkins: {
+        packageName: '.checkins',
+        rows: [
+            'Create Checkin',
+            'Query Checkin'
+        ],
+        methodsDict: {
+            'Create Checkin': 'CheckinsCreate',
+            'Query Checkin': 'CheckinsQuery'
+        }
+    },
+    'Custom Objects': {
+        packageName: '.customobjects',
+        rows: [
+            'Create Object',
+            'Query Object'
+        ],
+        methodsDict: {
+            'Create Object': 'CustomObjectsCreate',
+            'Query Object': 'CustomObjectsQuery'
+        }
+    },
+    Emails: {
+        packageName: '.emails',
+        className: 'Emails'
+    },
+    Events: {
+        packageName: '.events',
+        rows: [
+            'Create Event',
+            'Query Events',
+            'Query Event Occurrences',
+            'Search Events',
+            'Search Event Occurrences'
+        ],
+        methodsDict: {
+            'Create Event' : 'EventsCreate',
+            'Query Events' : 'EventsQuery',
+            'Query Event Occurrences' : 'EventsShowQueryOccurrences',
+            'Search Events' : 'EventsSearch',
+            'Search Event Occurrences' : 'EventsSearchOccurrences'
+        }
+    },
+    Files: {
+        packageName: '.files',
+        rows: [
+            'Create File',
+            'Query Files'
+        ],
+        methodsDict: {
+            'Create File' : 'FilesCreate',
+            'Query Files' : 'FilesQuery'
+        }
+    },
+    Friends: {
+        packageName: '.friends',
+        rows: [
+            'Add Friends',
+            'Approve Friends',
+            'Search Friends',
+            'Remove Friends'
+        ],
+        methodsDict: {
+            'Add Friends' : 'FriendsAdd',
+            'Approve Friends' : 'FriendsApprove',
+            'Search Friends' : 'FriendsSearch',
+            'Remove Friends' : 'FriendsRemove'
+        }
+    },
+    'Geo Fences': {
+        packageName: '.geoFences',
+        rows: [
+            'Create Geo Fence',
+            'Query Geo Fences'
+        ],
+        methodsDict: {
+            'Create Geo Fence': 'GeoFencesCreate',
+            'Query Geo Fences': 'GeoFencesQuery'
+        }
+    },
+    'Key Values': {
+        packageName: '.keyvalues',
+        className: 'Keyvalues'
+    },
+    Likes: {
+        packageName: '.likes',
+        rows: [
+            'Create Likes',
+            'Remove Likes'
+        ],
+        methodsDict: {
+            'Create Likes': 'LikesCreate',
+            'Remove Likes': 'LikesRemove'
+        }
+    },
+    'Photo Collections': {
+        packageName: '.photoCollections',
+        rows: [
+            'Create Photo Collection',
+            'Search Photo Collections'
+        ],
+        methodsDict: {
+            'Create Photo Collection' : 'PhotoCollectionsCreate',
+            'Search Photo Collections' : 'PhotoCollectionsSearch'
+        }
+    },
+    Messages: {
+        packageName: '.messages',
+        rows: [
+            'Create Message',
+            'Show Inbox',
+            'Show Sent',
+            'Show Threads'
+        ],
+        methodsDict: {
+            'Create Message' : 'MessagesCreate',
+            'Show Inbox' : 'MessagesShowInbox',
+            'Show Sent' : 'MessagesSent',
+            'Show Threads' : 'MessagesShowThreads'
+        }
+    },
+    Photos: {
+        packageName: '.photos',
+        rows: [
+            'Create Photo',
+            'Query Photo'
+        ],
+        methodsDict: {
+            'Create Photo': 'PhotosCreate',
+            'Query Photo': 'PhotosQuery'
+        }
+    },
+    Places: {
+        packageName: '.places',
+        rows: [
+            'Create Place',
+            'Query Place',
+            'Search Place'
+        ],
+        methodsDict: {
+            'Create Place': 'PlacesCreate',
+            'Query Place': 'PlacesQuery',
+            'Search Place': 'PlacesSearch'
+        }
+    },
+    Posts: {
+        packageName: '.posts',
+        rows: [
+            'Create Post',
+            'Query Post'
+        ],
+        methodsDict: {
+            'Create Post': 'PostsCreate',
+            'Query Post': 'PostsQuery'
+        }
+    },
+    Reviews: {
+        packageName: '.reviews',
+        rows: [
+            'Create Review',
+            'Query Review'
+        ],
+        methodsDict: {
+            'Create Review': 'ReviewsCreate',
+            'Query Review': 'ReviewsQuery'
+        }
+    },
+    Social: {
+        packageName: '.social',
+        rows: [
+            'External Link',
+            'External Login',
+            'External Unlink',
+            'Search Facebook Friends'
+        ],
+        methodsDict: {
+            'External Link': 'SocialExternalLink',
+            'External Login': 'SocialExternalLogin',
+            'External Unlink': 'SocialExternalUnlink',
+            'Search Facebook Friends': 'SocialFacebookFriendsSearch'
+        }
+    },
+    Status: {
+        packageName: '.statuses',
+        rows: [
+            'Create Status',
+            'Query Status',
+            'Search Statuses by User'
+        ],
+        methodsDict: {
+            'Create Status': 'StatusesCreate',
+            'Query Status': 'StatusesQuery',
+            'Search Statuses by User': 'StatusesUserStatus'
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    Users: {
+        packageName: '.users',
+        rows: [
+            'Create User',
+            'Login User',
+            'Request Reset Password',
+            'Resend Confirmation',
+            'Show Current User',
+            'Update Current User',
+            'Remove Current User',
+            'Logout Current User',
+            'Query User',
+            'Search User'
+        ],
+        methodsDict: {
+            'Create User'         : 'UsersCreate',
+            'Login User'          : 'UsersLogin',
+            'Request Reset Password': 'UsersRequestResetPassword',
+            'Resend Confirmation' : 'UsersResendConfirmation',
+            'Show Current User'   : 'UsersShowMe',
+            'Update Current User' : 'UsersUpdate',
+            'Remove Current User' : 'UsersRemove',
+            'Logout Current User' : 'UsersLogout',
+            'Query User'          : 'UsersQuery',
+            'Search User'         : 'UsersSearch'
+        }
+    }
+}

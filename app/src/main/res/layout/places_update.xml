@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" >
+
+	<ScrollView
+		android:id="@+id/scrollView1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true" >
+
+		<RelativeLayout 
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" >
+			
+			<EditText
+				android:id="@+id/places_update_name_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_marginTop="20dp"
+				android:ems="10"
+				android:hint="Name"
+				android:inputType="text" />
+
+			<EditText
+				android:id="@+id/places_update_address_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_marginTop="20dp"
+				android:ems="10"
+				android:layout_below="@+id/places_update_name_field"
+				android:hint="Address"
+				android:inputType="text" />
+
+			<EditText
+				android:id="@+id/places_update_city_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_marginTop="20dp"
+				android:ems="10"
+				android:layout_below="@+id/places_update_address_field"
+				android:hint="City"
+				android:inputType="text" />
+
+			<EditText
+				android:id="@+id/places_update_state_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/places_update_city_field"
+				android:layout_marginTop="20dp"
+				android:ems="10"
+				android:hint="State"
+				android:inputType="text" />
+
+			<EditText
+				android:id="@+id/places_update_postal_code_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/places_update_state_field"
+				android:layout_marginTop="20dp"
+				android:ems="10"
+				android:hint="Postal Code"
+				android:inputType="number" />
+			
+			<EditText
+				android:id="@+id/places_update_latitude_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/places_update_postal_code_field"
+				android:layout_marginTop="20dp"
+				android:ems="10"
+				android:hint="Latitude"
+				android:inputType="numberSigned|numberDecimal" />
+			
+			<EditText
+				android:id="@+id/places_update_longitude_field"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:layout_below="@+id/places_update_latitude_field"
+				android:layout_marginTop="20dp"
+				android:ems="10"
+				android:hint="Longitude"
+				android:inputType="numberSigned|numberDecimal" />
+
+			<Button
+				android:id="@+id/places_update_button1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/places_update_longitude_field"
+				android:layout_marginTop="20dp"
+				android:layout_centerHorizontal="true"
+				android:text="Update" />
+
+
+		</RelativeLayout>
+	</ScrollView>
+
+</RelativeLayout>
+
+

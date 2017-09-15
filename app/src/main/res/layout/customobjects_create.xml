@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/customobjects_create_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center" >
+            <EditText
+                android:id="@+id/customobjects_create_class_name_field"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:hint="Class Name" 
+                android:inputType="text" >
+                
+                <requestFocus />
+            </EditText>
+    
+            <EditText
+                android:id="@+id/customobjects_create_new_property_key_field"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:hint="New Property Key" 
+                android:inputType="text" >
+            </EditText>
+    
+            <Button
+                android:id="@+id/customobjects_create_add_new_property_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Add New Property" />
+    
+            <Button
+                android:id="@+id/customobjects_create_create_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Create" />
+            
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
