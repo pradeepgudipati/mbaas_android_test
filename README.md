@@ -3,7 +3,7 @@
 In order to run this application
 
 # Prerequisites:
--   Should have access to API Management Plus Environment
+-   Should have access to API Management Plus Environment ( https://360-preprod.cloud.appctest.com/ )
     This environment includes following components
        -    API Manager/Gateway
        -    API Portal
@@ -11,6 +11,8 @@ In order to run this application
        -    API Builder (API Runtime Services)
        -    Axway MBaaS
        -    Axway Decison Insight (Optional)
+
+-  The Generated code has the following structure 
 
 Steps to Download MBaaS Android SDK
 -   Virtualize Axway MBaaS API's uisng the MBaaS Swagger File or MBaaS Swagger URL in API Manager.
