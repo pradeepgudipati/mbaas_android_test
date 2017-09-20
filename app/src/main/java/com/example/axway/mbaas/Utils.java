@@ -16,50 +16,46 @@ import com.axway.mbaas_preprod.SdkException;
 
 public class Utils {
 
-	public static void handleErrorInResponse(final String response, final Activity activity) {
-		if (activity == null) {
-			return;
-		}
-		new AlertDialog.Builder(activity)
-		.setTitle("Alert").setMessage(response)
-		.setPositiveButton(android.R.string.ok, null)
-		.setIcon(android.R.drawable.ic_dialog_alert)
-		.show();
-	}
+    public static void handleErrorInResponse(final String response, final Activity activity) {
+        if (activity == null) {
+            return;
+        }
+        new AlertDialog.Builder(activity)
+                .setTitle("Alert").setMessage(response)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
-	public static void handleException(final Throwable e, final Activity activity) {
-		e.printStackTrace();
+    public static void handleException(final Throwable e, final Activity activity) {
+        e.printStackTrace();
 
-		if (activity == null) {
-			return;
-		}
-		new AlertDialog.Builder(activity)
-		.setTitle("Exception").setMessage(e.getLocalizedMessage())
-		.setPositiveButton(android.R.string.ok, null)
-		.setIcon(android.R.drawable.ic_dialog_alert)
-		.show();
-	}
+        if (activity == null) {
+            return;
+        }
+        new AlertDialog.Builder(activity)
+                .setTitle("Exception").setMessage(e.getLocalizedMessage())
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
-    public static void handleSDKExcpetion(final SdkException e, final Activity activity) {
+    public static void handleSDKException(final SdkException e, final Activity activity) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 activity);
-        String errMsg;
-        if (e.getCause().getMessage() != null)
-         errMsg = e.getCause().getMessage().toString();
-        else
-            errMsg =e.getCause().getCause().getMessage().toString();
-
+        String errMsg = e.getMessage();
         Log.d("SDK Error Message: ", errMsg);
         String eMessage = errMsg.substring(0, errMsg.indexOf("{"));
-					alertDialogBuilder.setTitle("Error!").setMessage(eMessage)
-							.setPositiveButton(android.R.string.ok,
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											activity.finish();
-										}
-									})
-							.show();
+        eMessage = eMessage + errMsg.substring(errMsg.indexOf("message") + 9, errMsg.indexOf("method_name") - 3);
+        alertDialogBuilder.setTitle("Error!").setMessage(eMessage)
+                .setPositiveButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                activity.finish();
+                            }
+                        })
+                .show();
 
     }
 

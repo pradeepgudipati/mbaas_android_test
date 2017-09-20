@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class UsersLogin extends Activity {
     private static UsersLogin currentActivity;
@@ -138,7 +138,7 @@ public class UsersLogin extends Activity {
 
 
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

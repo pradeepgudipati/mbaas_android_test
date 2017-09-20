@@ -32,7 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class AccessControlListsShow extends Activity {
 	private static final int READER = 1;
@@ -220,7 +220,7 @@ public class AccessControlListsShow extends Activity {
                             .show();
                     showButton3.setVisibility(View.VISIBLE);
             } else
-                handleSDKExcpetion(exceptionThrown,currentActivity);
+                handleSDKException(exceptionThrown,currentActivity);
             }catch (JSONException e1) {
                 Utils.handleException(e1, currentActivity);
             }
@@ -278,7 +278,7 @@ public class AccessControlListsShow extends Activity {
                         .show();
                 updateButton4.setVisibility(View.VISIBLE);
             } else
-                handleSDKExcpetion(exceptionThrown, currentActivity);
+                handleSDKException(exceptionThrown, currentActivity);
         }
     }
 
@@ -329,7 +329,7 @@ public class AccessControlListsShow extends Activity {
 
                 removeButton5.setVisibility(View.VISIBLE);
             } else
-                handleSDKExcpetion(exceptionThrown, currentActivity);
+                handleSDKException(exceptionThrown, currentActivity);
         }
     }
 

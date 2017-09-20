@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 
 public class UsersLogout extends Activity {
@@ -76,7 +76,7 @@ public class UsersLogout extends Activity {
                     ((TextView) findViewById(R.id.users_logout_text_view1)).setText("Logged out!");
                 }
                 else
-                    handleSDKExcpetion(exceptionThrown,currentActivity);
+                    handleSDKException(exceptionThrown,currentActivity);
 			} catch (JSONException e) {
 				handleException(e,currentActivity);
 			}

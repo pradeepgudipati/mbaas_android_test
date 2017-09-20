@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotosQuery extends Activity {
 	private static PhotosQuery currentActivity;
@@ -107,7 +107,7 @@ public class PhotosQuery extends Activity {
 					final StableArrayAdapter adapter = new StableArrayAdapter(currentActivity, android.R.layout.simple_list_item_1, objectsList);
 					listView.setAdapter(adapter);				}
 				else
-					handleSDKExcpetion(exceptionThrown,currentActivity);
+					handleSDKException(exceptionThrown,currentActivity);
 			} catch (JSONException e) {
 				handleException(e,currentActivity);
 			}

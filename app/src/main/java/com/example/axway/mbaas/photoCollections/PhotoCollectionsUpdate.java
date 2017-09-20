@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotoCollectionsUpdate extends Activity{
 private static PhotoCollectionsUpdate currentActivity;
@@ -145,7 +145,7 @@ private class apiTask extends AsyncTask<Void, Void, JSONObject>{
                 nameField.setText("");
 
             }else
-                handleSDKExcpetion(exceptionThrown, currentActivity);
+                handleSDKException(exceptionThrown, currentActivity);
         }catch(JSONException e){
             handleException(e, currentActivity);
         }
@@ -190,7 +190,7 @@ private class callApiTask extends AsyncTask<Void, Void, JSONObject>{
                 createButton.setVisibility(View.VISIBLE);
 
             }else
-                handleSDKExcpetion(exceptionThrown, currentActivity);
+                handleSDKException(exceptionThrown, currentActivity);
         }catch(JSONException e){
             handleException(e, currentActivity);
         }

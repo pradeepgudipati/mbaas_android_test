@@ -173,7 +173,7 @@ public class CustomObjectsCreate extends Activity {
 
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -189,7 +189,7 @@ public class CustomObjectsCreate extends Activity {
 				createButton.setVisibility(View.VISIBLE);
 
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

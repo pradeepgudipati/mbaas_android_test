@@ -83,7 +83,7 @@ public class CustomObjectsRemove extends Activity {
 
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -99,7 +99,7 @@ public class CustomObjectsRemove extends Activity {
 
 
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

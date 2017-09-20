@@ -31,12 +31,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class UsersUpdate extends Activity {
     private static UsersUpdate currentActivity;
     private ArrayList<EditText> fields = new ArrayList<EditText>();
-    final HashMap<String, Object> data = new HashMap<String, Object>();
+    final HashMap<String, String> data = new HashMap<String, String>();
 
     private EditText usernameField;
     private EditText passwordField;
@@ -171,7 +171,7 @@ public class UsersUpdate extends Activity {
                         tagsField.setText(tags.join(",").replaceAll("\"", ""));
                     }
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
@@ -194,22 +194,24 @@ public class UsersUpdate extends Activity {
             // Create dictionary of parameters to be passed with the request
             //final HashMap<String, Object> data = new HashMap<String, Object>();
             data.put("username", usernameField.getText().toString());
+            data.put("password", null);
+            data.put("password_confirmation", null);
             if (passwordField.getText().toString().length() > 0) {
-                data.put("password", passwordField.getText().toString());
-                data.put("password_confirmation", passwordConfField.getText().toString());
+                data.put("password", passwordField.getText().toString() == null ? "" : passwordField.getText().toString());
+                data.put("password_confirmation", passwordConfField.getText().toString() == null ? "" : passwordConfField.getText().toString());
             }
-            data.put("first_name", firstNameField.getText().toString());
-            data.put("last_name", lastNameField.getText().toString());
-            data.put("email", emailField.getText().toString());
-            data.put("tags", tagsField.getText().toString());
+            data.put("first_name", firstNameField.getText().toString() == null ? "" : firstNameField.getText().toString());
+            data.put("last_name", lastNameField.getText().toString() == null ? "" : lastNameField.getText().toString());
+            data.put("email", emailField.getText().toString() == null ? "" : emailField.getText().toString());
+            data.put("tags", tagsField.getText().toString() == null ? "" : tagsField.getText().toString());
 
         }
 
         @Override
         protected JSONObject doInBackground(Void... voids) {
             try {
-                successResponse = new UsersAPI(SdkClient.getInstance()).usersUpdate(data.get("email").toString(), data.get("username").toString(), data.get("password").toString(), data.get("password_confirmation").toString(),
-                        data.get("first_name").toString(), data.get("last_name").toString(), null, null, data.get("tags").toString(), null, null, null, null, null);
+                successResponse = new UsersAPI(SdkClient.getInstance()).usersUpdate(data.get("email"), data.get("username"), data.get("password"), data.get("password_confirmation"),
+                        data.get("first_name"), data.get("last_name"), null, null, data.get("tags"), null, null, null, null, null);
 
 
             } catch (final SdkException e) {
@@ -233,7 +235,7 @@ public class UsersUpdate extends Activity {
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

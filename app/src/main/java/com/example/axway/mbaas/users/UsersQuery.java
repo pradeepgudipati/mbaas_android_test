@@ -68,7 +68,7 @@ public class UsersQuery extends Activity {
             try {
                 successResponse = new UsersAPI(SdkClient.getInstance()).usersQuery(null, null, null, null, null, null, null, null, null, null, null);
             } catch (SdkException e) {
-                Utils.handleSDKExcpetion(e, currentActivity);
+                Utils.handleSDKException(e, currentActivity);
             }
             return successResponse;
         }

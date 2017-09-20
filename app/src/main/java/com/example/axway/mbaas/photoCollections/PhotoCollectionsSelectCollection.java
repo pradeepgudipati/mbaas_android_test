@@ -32,7 +32,7 @@ import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleErrorInResponse;
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotoCollectionsSelectCollection extends Activity {
     private static PhotoCollectionsSelectCollection currentActivity;
@@ -193,7 +193,7 @@ public class PhotoCollectionsSelectCollection extends Activity {
 
                     markSelection();
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

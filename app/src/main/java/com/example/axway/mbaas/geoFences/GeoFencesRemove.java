@@ -83,7 +83,7 @@ public class GeoFencesRemove extends Activity {
 				successResponse = new GeoFencesAPI(SdkClient.getInstance()).geoFencesDelete(data.get("id").toString(),null);
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -97,7 +97,7 @@ public class GeoFencesRemove extends Activity {
 						.setIcon(android.R.drawable.ic_dialog_info)
 						.show();
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

@@ -88,7 +88,7 @@ public class PushQuery extends Activity {
                         null,null,null,null,null,null,null);
             } catch (SdkException e) {
                 exceptionThrown = e;
-                //handleSDKExcpetion(e, currentActivity);
+                //handleSDKException(e, currentActivity);
             }
             return successResponse;
         }
@@ -128,7 +128,7 @@ public class PushQuery extends Activity {
                 }
                 queryButton.setVisibility(View.VISIBLE);
             } else {
-                Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+                Utils.handleSDKException(exceptionThrown, currentActivity);
             }
         }
     }

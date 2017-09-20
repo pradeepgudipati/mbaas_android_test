@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class AccessControlListsCreate extends Activity {
 	private static final int READER = 1;
@@ -164,7 +164,7 @@ public class AccessControlListsCreate extends Activity {
 						);
 			}catch(SdkException e){
 				exceptionThrown = e;
-				handleSDKExcpetion(exceptionThrown, currentActivity);
+				handleSDKException(exceptionThrown, currentActivity);
 			}
 
 			return successResponse;
@@ -186,7 +186,7 @@ public class AccessControlListsCreate extends Activity {
                     writerPublicAccess = false;
                 }else
 				{
-					handleSDKExcpetion(exceptionThrown, currentActivity);
+					handleSDKException(exceptionThrown, currentActivity);
 				}
 
 			} catch (JSONException e) {

@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleErrorInResponse;
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotoCollectionsSearch extends Activity {
     private static PhotoCollectionsSearch currentActivity;
@@ -144,7 +144,7 @@ public class PhotoCollectionsSearch extends Activity {
                     listView.setAdapter(adapter);
 
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

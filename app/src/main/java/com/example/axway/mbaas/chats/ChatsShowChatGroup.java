@@ -108,7 +108,7 @@ public class ChatsShowChatGroup extends Activity {
                                          e.printStackTrace();
                                      }
                                  } catch (SdkException e) {
-                                     Utils.handleSDKExcpetion(e, currentActivity);
+                                     Utils.handleSDKException(e, currentActivity);
                                  }
                              }
                          }).start();
@@ -186,7 +186,7 @@ public class ChatsShowChatGroup extends Activity {
                                         }
                                     });
                                 }catch (SdkException e) {
-                                    Utils.handleSDKExcpetion(e, currentActivity);
+                                    Utils.handleSDKException(e, currentActivity);
                                 }
                             }
                             }).start();
@@ -262,7 +262,7 @@ public class ChatsShowChatGroup extends Activity {
                   });
 
                 } catch (SdkException e) {
-                    Utils.handleSDKExcpetion(e, currentActivity);
+                    Utils.handleSDKException(e, currentActivity);
                 }
             }
         }).start();

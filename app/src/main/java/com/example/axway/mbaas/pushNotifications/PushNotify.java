@@ -161,7 +161,7 @@ public class PushNotify extends Activity {
                         .setIcon(android.R.drawable.ic_dialog_info).show();
 
             } else {
-                Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+                Utils.handleSDKException(exceptionThrown, currentActivity);
             }
         }
     }

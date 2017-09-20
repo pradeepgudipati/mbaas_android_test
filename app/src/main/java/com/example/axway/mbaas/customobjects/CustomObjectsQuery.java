@@ -144,7 +144,7 @@ public class CustomObjectsQuery extends Activity {
 
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -185,7 +185,7 @@ public class CustomObjectsQuery extends Activity {
 				}
 				queryButton.setVisibility(View.VISIBLE);
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

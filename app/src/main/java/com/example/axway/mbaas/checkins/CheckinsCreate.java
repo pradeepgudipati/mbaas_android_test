@@ -101,7 +101,7 @@ public class CheckinsCreate extends Activity {
 
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -115,7 +115,7 @@ public class CheckinsCreate extends Activity {
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.show();
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}
@@ -158,7 +158,7 @@ public class CheckinsCreate extends Activity {
 				}
 
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

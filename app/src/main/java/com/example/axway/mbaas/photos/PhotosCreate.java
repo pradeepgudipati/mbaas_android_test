@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotosCreate extends Activity {
 	private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 4;
@@ -246,7 +246,7 @@ public class PhotosCreate extends Activity {
 							.setIcon(android.R.drawable.ic_dialog_info)
 							.show();
 				} else
-					handleSDKExcpetion(exceptionThrown, currentActivity);
+					handleSDKException(exceptionThrown, currentActivity);
 			} catch (JSONException e) {
 				handleException(e, currentActivity);
 			}

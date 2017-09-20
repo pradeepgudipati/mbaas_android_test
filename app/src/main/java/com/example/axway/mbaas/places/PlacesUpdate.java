@@ -157,7 +157,7 @@ public class PlacesUpdate extends Activity {
 						}
 
                     } else {
-                        Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+                        Utils.handleSDKException(exceptionThrown, currentActivity);
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
@@ -233,7 +233,7 @@ public class PlacesUpdate extends Activity {
                         .show();
                 updateButton1.setVisibility(View.VISIBLE);
             }else
-                Utils.handleSDKExcpetion(exceptionThrown,currentActivity);
+                Utils.handleSDKException(exceptionThrown,currentActivity);
 
         }
     }

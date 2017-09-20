@@ -118,7 +118,7 @@ public class GeoFencesQuery extends Activity {
 					}
 
 				} else {
-					Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+					Utils.handleSDKException(exceptionThrown, currentActivity);
 				}
 			}
 		}

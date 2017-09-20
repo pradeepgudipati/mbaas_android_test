@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class UsersCreate extends Activity {
 	private static UsersCreate currentActivity;
@@ -146,7 +146,7 @@ public class UsersCreate extends Activity {
 							.setIcon(android.R.drawable.ic_dialog_info)
 							.show();
 				} else
-					handleSDKExcpetion(exceptionThrown, currentActivity);
+					handleSDKException(exceptionThrown, currentActivity);
 			} catch (JSONException e) {
 				handleException(e, currentActivity);
 			}

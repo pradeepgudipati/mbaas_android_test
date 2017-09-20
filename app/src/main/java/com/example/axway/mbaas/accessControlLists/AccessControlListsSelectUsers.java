@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class AccessControlListsSelectUsers extends Activity {
 	private static final int READER = 1;
@@ -171,7 +171,7 @@ public class AccessControlListsSelectUsers extends Activity {
 
             }catch(SdkException e){
                 exceptionThrown = e;
-				handleSDKExcpetion(exceptionThrown, currentActivity);
+				handleSDKException(exceptionThrown, currentActivity);
             }
 
             return successResponse;
@@ -205,7 +205,7 @@ public class AccessControlListsSelectUsers extends Activity {
                     markSelection();
                 }else
                 {
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
                 }
 
             } catch (JSONException e) {

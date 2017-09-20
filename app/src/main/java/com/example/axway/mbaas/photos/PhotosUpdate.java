@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotosUpdate extends Activity {
 	private static String TAG = "PhotosUpdate";
@@ -281,7 +281,7 @@ public class PhotosUpdate extends Activity {
                         tagsField.setText(tags.join(",").replaceAll("\"", ""));
                     }                }
                 else
-                    handleSDKExcpetion(exceptionThrown,currentActivity);
+                    handleSDKException(exceptionThrown,currentActivity);
             } catch (JSONException e) {
                 handleException(e,currentActivity);
             }
@@ -322,7 +322,7 @@ public class PhotosUpdate extends Activity {
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

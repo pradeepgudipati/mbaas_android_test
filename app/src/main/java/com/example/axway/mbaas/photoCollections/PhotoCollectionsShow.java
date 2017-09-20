@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotoCollectionsShow extends Activity {
     private static PhotoCollectionsShow currentActivity;
@@ -178,7 +178,7 @@ public class PhotoCollectionsShow extends Activity {
                             .getJSONObject(0).getString("name"));
                     setResult(300,collectionName);
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

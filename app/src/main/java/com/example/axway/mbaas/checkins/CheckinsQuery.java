@@ -108,7 +108,7 @@ public class CheckinsQuery extends Activity {
 						Utils.handleException(e1, currentActivity);
 					}
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

@@ -113,7 +113,7 @@ public class ChatsQuery extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Utils.handleSDKExcpetion(e, currentActivity);
+                            Utils.handleSDKException(e, currentActivity);
                         }
                     });
                 }

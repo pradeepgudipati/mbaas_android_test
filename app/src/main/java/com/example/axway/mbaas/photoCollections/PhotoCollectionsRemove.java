@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotoCollectionsRemove extends Activity {
     private static PhotoCollectionsRemove currentActivity;
@@ -94,7 +94,7 @@ public class PhotoCollectionsRemove extends Activity {
                             .show();
 
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

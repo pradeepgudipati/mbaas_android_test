@@ -86,7 +86,7 @@ public class QueryChannels extends Activity {
                 successResponse = new PushNotificationsAPI(SdkClient.getInstance()).pushNotificationsChannelsQuery(null,null,null,null,null);
             } catch (SdkException e) {
                 exceptionThrown = e;
-                //handleSDKExcpetion(e, currentActivity);
+                //handleSDKException(e, currentActivity);
             }
             return successResponse;
         }
@@ -120,7 +120,7 @@ public class QueryChannels extends Activity {
                 }
                 queryButton.setVisibility(View.VISIBLE);
             } else {
-                Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+                Utils.handleSDKException(exceptionThrown, currentActivity);
             }
         }
     }

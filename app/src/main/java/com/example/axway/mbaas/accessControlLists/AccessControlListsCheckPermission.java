@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class AccessControlListsCheckPermission extends Activity{
 private static AccessControlListsCheckPermission currentActivity;
@@ -108,7 +108,7 @@ private class aclUsersTask extends AsyncTask<Void, Void, JSONObject>{
 
         }catch(SdkException e){
             exceptionThrown = e;
-            //handleSDKExcpetion(exceptionThrown, currentActivity);
+            //handleSDKException(exceptionThrown, currentActivity);
         }
 
         return successResponse;
@@ -133,7 +133,7 @@ private class aclUsersTask extends AsyncTask<Void, Void, JSONObject>{
                 final StableArrayAdapter adapter = new StableArrayAdapter(currentActivity, android.R.layout.simple_list_item_1, objectsList);
                 listView.setAdapter(adapter);
             }else{
-                handleSDKExcpetion(exceptionThrown, currentActivity);
+                handleSDKException(exceptionThrown, currentActivity);
             }
 
         }catch(JSONException e){
@@ -175,7 +175,7 @@ private class checkPermission extends AsyncTask<Void, Void, JSONObject>{
 
         }catch(SdkException e){
             exceptionThrown = e;
-            // handleSDKExcpetion(e, currentActivity);
+            // handleSDKException(e, currentActivity);
         }
         return successResponse;
     }
@@ -192,7 +192,7 @@ private class checkPermission extends AsyncTask<Void, Void, JSONObject>{
                         .setIcon(android.R.drawable.ic_dialog_info)
                         .show();
             }else
-                handleSDKExcpetion(exceptionThrown, currentActivity);
+                handleSDKException(exceptionThrown, currentActivity);
 
 
         }catch(JSONException e){

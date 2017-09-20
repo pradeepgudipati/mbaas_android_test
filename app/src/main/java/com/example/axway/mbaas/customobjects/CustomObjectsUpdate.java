@@ -135,7 +135,7 @@ public class CustomObjectsUpdate extends Activity {
 
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -151,7 +151,7 @@ public class CustomObjectsUpdate extends Activity {
 			updateButton.setVisibility(View.VISIBLE);
 
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}
@@ -181,7 +181,7 @@ public class CustomObjectsUpdate extends Activity {
 
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -221,7 +221,7 @@ public class CustomObjectsUpdate extends Activity {
 				}
 
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class PhotoCollectionsCreate extends Activity {
     private static final int REQUEST_CODE = 1;
@@ -154,7 +154,7 @@ public class PhotoCollectionsCreate extends Activity {
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
                 } else
-                    handleSDKExcpetion(exceptionThrown, currentActivity);
+                    handleSDKException(exceptionThrown, currentActivity);
             } catch (JSONException e) {
                 handleException(e, currentActivity);
             }

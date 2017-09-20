@@ -178,7 +178,7 @@ public class GeoFencesUpdate extends Activity {
 						.show();
 				updateButton1.setVisibility(View.VISIBLE);
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

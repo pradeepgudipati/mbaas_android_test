@@ -143,7 +143,7 @@ public class Chats extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Utils.handleSDKExcpetion(e,currentActivity);
+                            Utils.handleSDKException(e,currentActivity);
                         }
                     });
 

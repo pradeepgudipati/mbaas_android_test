@@ -99,7 +99,7 @@ public class CheckinsRemove extends Activity {
 				removeButton1.setVisibility(View.VISIBLE);
 
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}

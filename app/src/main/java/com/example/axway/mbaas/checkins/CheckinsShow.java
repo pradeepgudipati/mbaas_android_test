@@ -92,7 +92,7 @@ public class CheckinsShow extends Activity {
 						textView.setText(successResponse.toString(4));
 
 					} else {
-						Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+						Utils.handleSDKException(exceptionThrown, currentActivity);
 					}
 				} catch (JSONException e1) {
 					e1.printStackTrace();

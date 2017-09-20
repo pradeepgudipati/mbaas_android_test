@@ -30,7 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.example.axway.mbaas.Utils.handleSDKExcpetion;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class AccessControlListsUpdateUsers extends Activity {
 	private static final int UPDATE_READER = 3;
@@ -158,7 +158,7 @@ public class AccessControlListsUpdateUsers extends Activity {
 
 			} catch (SdkException e) {
 				exceptionThrown = e;
-				//handleSDKExcpetion(e, currentActivity);
+				//handleSDKException(e, currentActivity);
 			}
 			return successResponse;
 		}
@@ -174,7 +174,7 @@ public class AccessControlListsUpdateUsers extends Activity {
 
 				addUsersButton3.setVisibility(View.VISIBLE);
 			} else {
-				Utils.handleSDKExcpetion(exceptionThrown, currentActivity);
+				Utils.handleSDKException(exceptionThrown, currentActivity);
 			}
 		}
 	}
@@ -226,7 +226,7 @@ public class AccessControlListsUpdateUsers extends Activity {
 					removeUsersButton4.setVisibility(View.VISIBLE);
 
             }else
-				handleSDKExcpetion(exceptionThrown, currentActivity);
+				handleSDKException(exceptionThrown, currentActivity);
    		 }
     }
 }
