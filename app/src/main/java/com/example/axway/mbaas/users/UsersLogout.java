@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.UsersAPI;
-import com.axway.mbaas_preprod.auth.SdkCookiesHelper;
 import com.example.axway.mbaas.R;
 
 import org.json.JSONException;
@@ -51,12 +50,7 @@ public class UsersLogout extends Activity {
 
 		@Override
 		protected void onPreExecute() {
-			try {
-				if(SdkCookiesHelper.getInstance().isAvailable())
-                    SdkCookiesHelper.getInstance().logoutUser();
-			} catch (SdkException e) {
-				e.printStackTrace();
-			}
+
 		}
 		@Override
 		protected JSONObject doInBackground(Void... voids) {

@@ -1,11 +1,11 @@
-
  
 
 package com.axway.mbaas_preprod.auth;
 
-import com.google.api.client.http.HttpRequestInitializer;
 
-public interface SdkAuthentication extends HttpRequestInitializer {
+import java.util.Map;
+
+public interface SdkAuthentication {
   /**
    * Log out the user
    */
@@ -17,4 +17,10 @@ public interface SdkAuthentication extends HttpRequestInitializer {
    * @return true if available, false if NOT available
    */
   boolean isAvailable();
+
+  /**
+   * returns the header for auth type
+   * @return
+   */
+  Map<String, String> getHeader();
 }

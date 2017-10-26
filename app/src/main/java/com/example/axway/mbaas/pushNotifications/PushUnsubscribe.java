@@ -23,7 +23,6 @@ import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.PushNotificationsAPI;
 import com.example.axway.mbaas.R;
 import com.example.axway.mbaas.Utils;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -70,7 +69,7 @@ public class PushUnsubscribe extends Activity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deviceToken = FirebaseInstanceId.getInstance().getToken();
+//                deviceToken = FirebaseInstanceId.getInstance().getToken();
                 Log.d(TAG, "Refreshed token: " + deviceToken);
                 new unsubscribePush().execute();
             }

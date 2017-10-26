@@ -1,14 +1,11 @@
-
  
 
 package com.axway.mbaas_preprod.auth;
 
-import java.io.IOException;
-
-import com.google.api.client.http.HttpRequest;
-
 import android.text.TextUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 /**
  * Handles the API Key based Authentication
  */
@@ -85,23 +82,25 @@ public class SdkAPIKeyAuth implements SdkAuthentication {
     this.apiKeyPrefix = apiKeyPrefix;
   }
 
-  @Override
-  public void initialize(HttpRequest request) throws IOException {
-    if (apiKey == null) {
-      return;
+    @Override
+    public Map<String, String> getHeader() {
+        Map<String, String> header = new HashMap<>();
+        if (apiKey == null) {
+            return header;
+        }
+        String value;
+        if (apiKeyPrefix != null) {
+            value = apiKeyPrefix + " " + apiKey;
+        } else {
+            value = apiKey;
+        }
+        if ("query".equals(location)) {
+            header.put(paramName, value);
+        } else if ("header".equals(location)) {
+            header.put(paramName, value);
+        }
+        return header;
     }
-    String value;
-    if (apiKeyPrefix != null) {
-      value = apiKeyPrefix + " " + apiKey;
-    } else {
-      value = apiKey;
-    }
-    if ("query".equals(location)) {
-      request.getUrl().put(paramName, value);
-    } else if ("header".equals(location)) {
-      request.getHeaders().put(paramName, value);
-    }
-  }
 
   /**
    * Resets the API Key details to logout

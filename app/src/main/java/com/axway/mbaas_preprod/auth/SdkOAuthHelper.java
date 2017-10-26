@@ -1,21 +1,6 @@
-
  
 
 package com.axway.mbaas_preprod.auth;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONException;
-
-import com.axway.mbaas_preprod.SdkUtils;
-import com.axway.mbaas_preprod.SdkClient;
-import com.axway.mbaas_preprod.SdkException;
-import com.axway.mbaas_preprod.SdkConstants;
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpRequest;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -27,6 +12,11 @@ import android.support.customtabs.CustomTabsIntent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.axway.mbaas_preprod.SdkClient;
+import com.axway.mbaas_preprod.SdkConstants;
+import com.axway.mbaas_preprod.SdkException;
+import com.axway.mbaas_preprod.SdkUtils;
+
 import net.openid.appauth.AppAuthConfiguration;
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -34,13 +24,17 @@ import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
-import net.openid.appauth.GrantTypeValues;
-import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 import net.openid.appauth.browser.BrowserWhitelist;
 import net.openid.appauth.encryption.AesCbcWithIntegrity;
 import net.openid.appauth.encryption.SecurePreferences;
+
+import org.json.JSONException;
+
+import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SdkOAuthHelper Helper Class
@@ -433,23 +427,20 @@ public void disposeAuthenticationState() {
 /**
  * Initializes a request, by adding the Authorization header to the request.
  *
- * @param request @see HTTPRequest
  */
 @Override
-public void initialize(HttpRequest request) throws IOException {
-    try {
-        HttpHeaders authHeaders = new HttpHeaders ();
-         if (getAuthState() != null && getAuthState().getAccessToken() != null) {
-            String token = mAuthState.getAccessToken();
-            authHeaders.setAuthorization("Bearer " + token);
-            authHeaders.fromHttpHeaders(request.getHeaders());
-            request.setHeaders(authHeaders);
+    public Map<String, String> getHeader() {
+        Map<String, String> header = new HashMap<>();
+        try {
+            if (getAuthState() != null && getAuthState().getAccessToken() != null) {
+                String token = mAuthState.getAccessToken();
+                header.put("authorization", "Bearer " + token);
+            }
+        } catch (Exception e) {
+            Log.e(logTag, " HttpRequestInitializer initialize exception e =" + e.getMessage());
         }
-    } catch (Exception e) {
-        Log.e (logTag, " HttpRequestInitializer initialize exception e =" + e.getMessage ());
-        throw new IOException ("Initialize SdkOAuthHelper Failed");
+        return header;
     }
-}
 
 /**
  * Log out the user

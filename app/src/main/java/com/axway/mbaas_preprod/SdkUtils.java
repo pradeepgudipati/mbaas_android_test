@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -144,5 +145,15 @@ public class SdkUtils {
       return false;
     }
   }
+
+// url = file path or whatever suitable URL you want.
+public static String getMimeType(String url){
+    String type = null;
+    String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+    if(extension != null){
+        type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+    }
+    return type;
+}
 
 }
