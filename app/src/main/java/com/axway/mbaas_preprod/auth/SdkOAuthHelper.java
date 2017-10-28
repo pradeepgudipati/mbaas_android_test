@@ -1,5 +1,3 @@
- 
-
 package com.axway.mbaas_preprod.auth;
 
 import android.app.Activity;
@@ -39,7 +37,7 @@ import java.util.Map;
 /**
  * SdkOAuthHelper Helper Class
  */
-public class SdkOAuthHelper implements SdkAuthentication, SdkConstants {
+public class SdkOAuthHelper implements SdkAuthentication, SdkConstants{
 
 /**
  * Selected Identity provider
@@ -66,7 +64,7 @@ private static SharedPreferences mSecurePreferences;
 /**
  * Tag name for Log.d
  */
-private final String logTag = SdkOAuthHelper.this.getClass ().getSimpleName ();
+private final String logTag = SdkOAuthHelper.this.getClass().getSimpleName();
 /**
  * Authorization service object
  */
@@ -75,7 +73,7 @@ private AuthorizationService mAuthService;
 /**
  * Constructor for SdkOAuthHelper Class
  */
-private SdkOAuthHelper() {
+private SdkOAuthHelper(){
     mSdkOAuthHelperInstance = this;
 }
 
@@ -85,10 +83,10 @@ private SdkOAuthHelper() {
  * @param context @{@link Context} object
  * @throws SdkException Custom Exception class
  */
-public static void initializeOAuth(@NonNull Context context, Activity callBackActivity) throws SdkException, GeneralSecurityException {
-    if (mSdkOAuthHelperInstance == null) {
-        init (context, null);
-        SdkOAuthTokenHelper.getInstance ().processTokenCallback (callBackActivity);
+public static void initializeOAuth(@NonNull Context context, Activity callBackActivity) throws SdkException, GeneralSecurityException{
+    if(mSdkOAuthHelperInstance == null){
+        init(context, null);
+        SdkOAuthTokenHelper.getInstance().processTokenCallback(callBackActivity);
     }
 }
 
@@ -98,9 +96,9 @@ public static void initializeOAuth(@NonNull Context context, Activity callBackAc
  * @param context @{@link Context} object
  * @throws SdkException Custom Exception class
  */
-public static void initializeOAuth(@NonNull Context context) throws SdkException {
-    if (mSdkOAuthHelperInstance == null) {
-        init (context, null);
+public static void initializeOAuth(@NonNull Context context) throws SdkException{
+    if(mSdkOAuthHelperInstance == null){
+        init(context, null);
     }
 }
 
@@ -110,22 +108,22 @@ public static void initializeOAuth(@NonNull Context context) throws SdkException
  * @param context @{@link Context} object
  * @throws SdkException Custom Exception class
  */
-public static void initializeOAuth(@NonNull Context context, @NonNull BrowserWhitelist browsers) throws SdkException, GeneralSecurityException {
-    if (mSdkOAuthHelperInstance == null) {
-        init (context, browsers);
+public static void initializeOAuth(@NonNull Context context, @NonNull BrowserWhitelist browsers) throws SdkException, GeneralSecurityException{
+    if(mSdkOAuthHelperInstance == null){
+        init(context, browsers);
     }
 }
 
-private static void init(@NonNull Context context, BrowserWhitelist browsers) throws SdkException {
+private static void init(@NonNull Context context, BrowserWhitelist browsers) throws SdkException{
 
-    if (mSdkOAuthHelperInstance == null) {
-        mSdkOAuthHelperInstance = new SdkOAuthHelper ();
-        initSecurePrefs (context.getApplicationContext ());
+    if(mSdkOAuthHelperInstance == null){
+        mSdkOAuthHelperInstance = new SdkOAuthHelper();
+        initSecurePrefs(context.getApplicationContext());
 
-        if (browsers != null) {
-            mSdkOAuthHelperInstance.initAuthService (context, browsers);
-        } else {
-            mSdkOAuthHelperInstance.initAuthService (context);
+        if(browsers != null){
+            mSdkOAuthHelperInstance.initAuthService(context, browsers);
+        }else{
+            mSdkOAuthHelperInstance.initAuthService(context);
         }
 
         isSdkOAuthHelperInitialized = true;
@@ -140,14 +138,14 @@ private static void init(@NonNull Context context, BrowserWhitelist browsers) th
  *
  * @return mSdkOAuthHelperInstance object of {@link SdkOAuthHelper} class
  */
-public static SdkOAuthHelper getInstance() {
+public static SdkOAuthHelper getInstance(){
     return mSdkOAuthHelperInstance;
 }
 
 /**
  * @return true if {@link SdkOAuthTokenHelper} is initialized false otherwise
  */
-public static boolean checkIfInitialized() {
+public static boolean checkIfInitialized(){
     return isSdkOAuthHelperInitialized;
 }
 
@@ -156,12 +154,12 @@ public static boolean checkIfInitialized() {
  *
  * @throws GeneralSecurityException if SecurePreferences initialization fails
  */
-private static void initSecurePrefs(@NonNull Context context) throws SdkException {
-    try {
-        String pass = AesCbcWithIntegrity.generateKey ().toString ();
-        mSecurePreferences = new SecurePreferences (context, pass, SHARED_PREFS_STORE_NAME);
-    } catch (GeneralSecurityException gse) {
-        throw new SdkException (SdkException.SECURE_PREFERENCES_NOT_INITIALIZED, "Secure Store initialization error");
+private static void initSecurePrefs(@NonNull Context context) throws SdkException{
+    try{
+        String pass = AesCbcWithIntegrity.generateKey().toString();
+        mSecurePreferences = new SecurePreferences(context, pass, SHARED_PREFS_STORE_NAME);
+    }catch(GeneralSecurityException gse){
+        throw new SdkException(SdkException.SECURE_PREFERENCES_NOT_INITIALIZED, "Secure Store initialization error");
     }
 }
 
@@ -170,32 +168,32 @@ private static void initSecurePrefs(@NonNull Context context) throws SdkExceptio
  *
  * @return {@see AuthState} object
  */
-private static AuthState readAuthStateFromSharedPrefs() throws SdkException {
-    if (mSecurePreferences != null) {
-        String decryptedString = mSecurePreferences.getString (SHARED_PREFS_KEY_NAME, "");
+private static AuthState readAuthStateFromSharedPrefs() throws SdkException{
+    if(mSecurePreferences != null){
+        String decryptedString = mSecurePreferences.getString(SHARED_PREFS_KEY_NAME, "");
         AuthState state = null;
-        if (!TextUtils.isEmpty (decryptedString)) {
-            try {
-                state = AuthState.jsonDeserialize (decryptedString);
-            } catch (JSONException e) {
-                Log.e ("", "readAuthStateFromSharedPrefs :: Error reading JSON file " + e.getMessage ());
-                throw new SdkException (SdkException.AUTH_STATE_READ_FAILED, "Reading Auth state from Storage failed" + e.getMessage ());
+        if(!TextUtils.isEmpty(decryptedString)){
+            try{
+                state = AuthState.jsonDeserialize(decryptedString);
+            }catch(JSONException e){
+                Log.e("", "readAuthStateFromSharedPrefs :: Error reading JSON file " + e.getMessage());
+                throw new SdkException(SdkException.AUTH_STATE_READ_FAILED, "Reading Auth state from Storage failed" + e.getMessage());
 
             }
         }
         return state;
-    } else {
-        throw new SdkException (SdkException.SECURE_PREFERENCES_NOT_INITIALIZED, "Initialize Secure Preferences first :: #initSecurePrefs");
+    }else{
+        throw new SdkException(SdkException.SECURE_PREFERENCES_NOT_INITIALIZED, "Initialize Secure Preferences first :: #initSecurePrefs");
     }
 
 }
 
-static AuthState getAuthState() throws SdkException {
-    if (mAuthState == null || mAuthState.getAccessToken () == null) {
-        mAuthState = readAuthStateFromSharedPrefs ();
+static AuthState getAuthState() throws SdkException{
+    if(mAuthState == null || mAuthState.getAccessToken() == null){
+        mAuthState = readAuthStateFromSharedPrefs();
 
-        if (mAuthState == null) {
-            mAuthState = new AuthState ();
+        if(mAuthState == null){
+            mAuthState = new AuthState();
         }
     }
     return mAuthState;
@@ -206,10 +204,10 @@ static AuthState getAuthState() throws SdkException {
  *
  * @param context {@link Context} Object
  */
-private void initAuthService(@NonNull Context context) {
+private void initAuthService(@NonNull Context context){
     AppAuthConfiguration appAuthConfig;
-    appAuthConfig = new AppAuthConfiguration.Builder ().build ();
-    initAuthService (appAuthConfig, context);
+    appAuthConfig = new AppAuthConfiguration.Builder().build();
+    initAuthService(appAuthConfig, context);
 }
 
 /**
@@ -218,12 +216,12 @@ private void initAuthService(@NonNull Context context) {
  * @param context  {@link Context} Object
  * @param browsers {@link BrowserWhitelist} Object
  */
-private void initAuthService(@NonNull Context context, @NonNull BrowserWhitelist browsers) {
+private void initAuthService(@NonNull Context context, @NonNull BrowserWhitelist browsers){
     AppAuthConfiguration appAuthConfig;
 
-    if (browsers != null) {
-        appAuthConfig = new AppAuthConfiguration.Builder ().setBrowserMatcher (browsers).build ();
-        initAuthService (appAuthConfig, context);
+    if(browsers != null){
+        appAuthConfig = new AppAuthConfiguration.Builder().setBrowserMatcher(browsers).build();
+        initAuthService(appAuthConfig, context);
     }
 }
 
@@ -233,8 +231,8 @@ private void initAuthService(@NonNull Context context, @NonNull BrowserWhitelist
  * @param appAuthConfig {@link AuthorizationService} Object
  * @param context       {@link Context} Object
  */
-private void initAuthService(@NonNull AppAuthConfiguration appAuthConfig, @NonNull Context context) {
-    mAuthService = new AuthorizationService (context, appAuthConfig);
+private void initAuthService(@NonNull AppAuthConfiguration appAuthConfig, @NonNull Context context){
+    mAuthService = new AuthorizationService(context, appAuthConfig);
 }
 
 /**
@@ -242,17 +240,17 @@ private void initAuthService(@NonNull AppAuthConfiguration appAuthConfig, @NonNu
  *
  * @param state {@link AuthState} object
  */
-void writeAuthStateToSharedPrefs(@NonNull AuthState state) {
+void writeAuthStateToSharedPrefs(@NonNull AuthState state){
 
-    mSecurePreferences.edit ().putString (SHARED_PREFS_KEY_NAME, state.jsonSerializeString ()).apply ();
+    mSecurePreferences.edit().putString(SHARED_PREFS_KEY_NAME, state.jsonSerializeString()).apply();
 
 }
 
 /**
  * Resets the Auth state
  */
-private void resetAuthStateInSharedPrefs() {
-    mSecurePreferences.edit ().putString (SHARED_PREFS_KEY_NAME, "").apply ();
+private void resetAuthStateInSharedPrefs(){
+    mSecurePreferences.edit().putString(SHARED_PREFS_KEY_NAME, "").apply();
 }
 
 /**
@@ -261,24 +259,24 @@ private void resetAuthStateInSharedPrefs() {
  * @param serviceConfig {@link AuthorizationServiceConfiguration} object
  * @return AuthorizationRequest Object
  */
-private AuthorizationRequest getAuthorizationRequest(final @NonNull Context context, @NonNull AuthorizationServiceConfiguration serviceConfig) throws SdkException {
+private AuthorizationRequest getAuthorizationRequest(final @NonNull Context context, @NonNull AuthorizationServiceConfiguration serviceConfig) throws SdkException{
 
-    checkClientCredentials ();
+    checkClientCredentials();
 
     AuthorizationRequest authRequest = null;
 
 
     // Log.d(logTag, authRequest != null ? authRequest.toUri().toString() : null);
     return authRequest;
-  }
+}
 
-private void checkClientCredentials() throws SdkException {
+private void checkClientCredentials() throws SdkException{
 
-    if (TextUtils.isEmpty (getSelectedIDP ().getClientId ()) && TextUtils.isEmpty (getSelectedIDP ().getClientSecret ())) {
-        throw new SdkException (SdkException.OAUTHPASSWORD_CLIENT_CREDENTIALS_MISSING, "Client ID /Client Secret not set");
+    if(TextUtils.isEmpty(getSelectedIDP().getClientId()) && TextUtils.isEmpty(getSelectedIDP().getClientSecret())){
+        throw new SdkException(SdkException.OAUTHPASSWORD_CLIENT_CREDENTIALS_MISSING, "Client ID /Client Secret not set");
     }
-    if (getSelectedIDP ().getClientId ().equalsIgnoreCase ("SOME_CLIENT_ID") && getSelectedIDP ().getClientSecret ().equalsIgnoreCase ("SOME_CLIENT_SECRET")) {
-        throw new SdkException (SdkException.OAUTHPASSWORD_CLIENT_CREDENTIALS_MISSING, "Client ID /Client Secret not set");
+    if(getSelectedIDP().getClientId().equalsIgnoreCase("SOME_CLIENT_ID") && getSelectedIDP().getClientSecret().equalsIgnoreCase("SOME_CLIENT_SECRET")){
+        throw new SdkException(SdkException.OAUTHPASSWORD_CLIENT_CREDENTIALS_MISSING, "Client ID /Client Secret not set");
 
     }
 }
@@ -290,72 +288,72 @@ private void checkClientCredentials() throws SdkException {
  * @param activity {@link Activity}
  * @throws SdkException Custom Exception
  */
-public void doOAuth2Legged(@NonNull SdkIdentityProvider idp, final @NonNull Activity activity) throws SdkException {
-    setSelectedIDP (idp);
+public void doOAuth2Legged(@NonNull SdkIdentityProvider idp, final @NonNull Activity activity) throws SdkException{
+    setSelectedIDP(idp);
     SdkClient.getInstance().setAuthenticationType(idp.getIDPName());
-    if (SdkUtils.isCurrentlyOnMainUIThread ()) {
-        throw new SdkException (SdkException.ERROR_RUNNING_ON_UI_THREAD, "Authentication is running on UI thread. Please call it inside an Async task or a thread");
+    if(SdkUtils.isCurrentlyOnMainUIThread()){
+        throw new SdkException(SdkException.ERROR_RUNNING_ON_UI_THREAD, "Authentication is running on UI thread. Please call it inside an Async task or a thread");
     }
 
-    final AuthorizationServiceConfiguration.RetrieveConfigurationCallback retrieveCallback = new AuthorizationServiceConfiguration.RetrieveConfigurationCallback () {
+    final AuthorizationServiceConfiguration.RetrieveConfigurationCallback retrieveCallback = new AuthorizationServiceConfiguration.RetrieveConfigurationCallback(){
 
         @Override
-        public void onFetchConfigurationCompleted(@Nullable AuthorizationServiceConfiguration serviceConfiguration, @Nullable AuthorizationException ex) {
+        public void onFetchConfigurationCompleted(@Nullable AuthorizationServiceConfiguration serviceConfiguration, @Nullable AuthorizationException ex){
 
-            if (ex != null) {
-                Log.w (logTag, "Failed to retrieve configuration for " + getSelectedIDP ().getIDPName (), ex);
-            } else {
+            if(ex != null){
+                Log.w(logTag, "Failed to retrieve configuration for " + getSelectedIDP().getIDPName(), ex);
+            }else{
                 final String headerUserName = "username";
                 final String headerPass = "password";
                 final String headerClientSecret = "client_secret";
-                try {
-                    Map<String, String> additionalParameters = new HashMap<> ();
+                try{
+                    Map<String, String> additionalParameters = new HashMap<>();
                     String grant_type = "";
                     String scopes = "";
 
-                    TokenRequest formattedRequest = (new TokenRequest.Builder (serviceConfiguration, getSelectedIDP ().getClientId ())).setGrantType (grant_type).setScope (scopes).setClientId (getSelectedIDP ().getClientId ()).setAdditionalParameters (additionalParameters).build ();
+                    TokenRequest formattedRequest = (new TokenRequest.Builder(serviceConfiguration, getSelectedIDP().getClientId())).setGrantType(grant_type).setScope(scopes).setClientId(getSelectedIDP().getClientId()).setAdditionalParameters(additionalParameters).build();
 
 
-                    try {
-                        final ClientAuthentication clientAuthentication = SdkOAuthHelper.getAuthState ().getClientAuthentication ();
+                    try{
+                        final ClientAuthentication clientAuthentication = SdkOAuthHelper.getAuthState().getClientAuthentication();
 
-                        getAuthService ().performTokenRequest (formattedRequest, clientAuthentication, new AuthorizationService.TokenResponseCallback () {
+                        getAuthService().performTokenRequest(formattedRequest, clientAuthentication, new AuthorizationService.TokenResponseCallback(){
 
                             @Override
-                            public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException ex) {
-                                try {
+                            public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException ex){
+                                try{
 
                                     // Update the AuthState
-                                    getAuthState ().update (tokenResponse, ex);
+                                    getAuthState().update(tokenResponse, ex);
 
                                     // Save the Auth State
-                                    SdkOAuthHelper.getInstance ().writeAuthStateToSharedPrefs (getAuthState ());
+                                    SdkOAuthHelper.getInstance().writeAuthStateToSharedPrefs(getAuthState());
 
                                     // Call back
-                                    SdkOAuthTokenHelper.getInstance ().processTokenCallback (activity);
+                                    SdkOAuthTokenHelper.getInstance().processTokenCallback(activity);
 
-                                } catch (SdkException e) {
-                                    Log.e (logTag, "OAuth Exception ----" + e.getMessage ());
+                                }catch(SdkException e){
+                                    Log.e(logTag, "OAuth Exception ----" + e.getMessage());
                                 }
 
                             }
                         });
-                    } catch (SdkException e) {
-                        Log.e (logTag, "getClientAuthentication Exception -- " + e.getMessage ());
+                    }catch(SdkException e){
+                        Log.e(logTag, "getClientAuthentication Exception -- " + e.getMessage());
                     }
-                } catch (ClientAuthentication.UnsupportedAuthenticationMethod cex) {
-                    Log.e (logTag, "Token request cannot be made, client authentication for the token " + "endpoint could not be constructed (%s)" + cex.getMessage ());
+                }catch(ClientAuthentication.UnsupportedAuthenticationMethod cex){
+                    Log.e(logTag, "Token request cannot be made, client authentication for the token " + "endpoint could not be constructed (%s)" + cex.getMessage());
                 }
 
             }
         }
     };
-    idp.retrieveConfig (retrieveCallback);
+    idp.retrieveConfig(retrieveCallback);
 
 }
 
-public void doOAuth3Legged(@NonNull SdkIdentityProvider idp, final @NonNull Context context) throws SdkException {
-    doOAuth3Legged (idp, context, context.getClass ());
+public void doOAuth3Legged(@NonNull SdkIdentityProvider idp, final @NonNull Context context) throws SdkException{
+    doOAuth3Legged(idp, context, context.getClass());
 }
 
 /**
@@ -365,43 +363,43 @@ public void doOAuth3Legged(@NonNull SdkIdentityProvider idp, final @NonNull Cont
  * @param callBackActivity {@link Activity} The callback Activity class
  * @throws SdkException Exception if something goes wrong
  */
-public void doOAuth3Legged(@NonNull SdkIdentityProvider idp, final @NonNull Context context, final @Nullable Class callBackActivity) throws SdkException {
-    setSelectedIDP (idp);
+public void doOAuth3Legged(@NonNull SdkIdentityProvider idp, final @NonNull Context context, final @Nullable Class callBackActivity) throws SdkException{
+    setSelectedIDP(idp);
     SdkClient.getInstance().setAuthenticationType(idp.getIDPName());
-    if (SdkUtils.isCurrentlyOnMainUIThread ()) {
-        throw new SdkException (SdkException.ERROR_RUNNING_ON_UI_THREAD, "Authentication is running on UI thread. Please call it inside an Async task or a thread");
+    if(SdkUtils.isCurrentlyOnMainUIThread()){
+        throw new SdkException(SdkException.ERROR_RUNNING_ON_UI_THREAD, "Authentication is running on UI thread. Please call it inside an Async task or a thread");
     }
 
-    if (TextUtils.isEmpty (getSelectedIDP ().getClientSecret ()) && TextUtils.isEmpty (getSelectedIDP ().getClientId ())) {
-        throw new SdkException (SdkException.OAUTHPASSWORD_CLIENT_CREDENTIALS_MISSING, "OAuth Client Credentials missing. Set them to the Identity Provider");
+    if(TextUtils.isEmpty(getSelectedIDP().getClientSecret()) && TextUtils.isEmpty(getSelectedIDP().getClientId())){
+        throw new SdkException(SdkException.OAUTHPASSWORD_CLIENT_CREDENTIALS_MISSING, "OAuth Client Credentials missing. Set them to the Identity Provider");
     }
 
-    final AuthorizationServiceConfiguration.RetrieveConfigurationCallback retrieveCallback = new AuthorizationServiceConfiguration.RetrieveConfigurationCallback () {
+    final AuthorizationServiceConfiguration.RetrieveConfigurationCallback retrieveCallback = new AuthorizationServiceConfiguration.RetrieveConfigurationCallback(){
 
         @Override
-        public void onFetchConfigurationCompleted(@Nullable AuthorizationServiceConfiguration serviceConfiguration, @Nullable AuthorizationException ex) {
+        public void onFetchConfigurationCompleted(@Nullable AuthorizationServiceConfiguration serviceConfiguration, @Nullable AuthorizationException ex){
 
-            if (ex != null) {
-                Log.e (logTag, "Failed to retrieve configuration for " + getSelectedIDP ().getIDPName (), ex);
-            } else {
-                Log.d (logTag, "configuration retrieved for " + getSelectedIDP ().getIDPName () + ", proceeding");
+            if(ex != null){
+                Log.e(logTag, "Failed to retrieve configuration for " + getSelectedIDP().getIDPName(), ex);
+            }else{
+                Log.d(logTag, "configuration retrieved for " + getSelectedIDP().getIDPName() + ", proceeding");
 
-                if (serviceConfiguration != null) {
+                if(serviceConfiguration != null){
                     AuthorizationRequest authRequest = null;
-                    try {
-                        authRequest = getAuthorizationRequest (context, serviceConfiguration);
-                    } catch (SdkException e) {
-                        Log.e (logTag, "retrieveCallback , Auth Request Creation failed");
-                        throw new RuntimeException ("Auth Request Creation failed - " + e.getMessage ());
+                    try{
+                        authRequest = getAuthorizationRequest(context, serviceConfiguration);
+                    }catch(SdkException e){
+                        Log.e(logTag, "retrieveCallback , Auth Request Creation failed");
+                        throw new RuntimeException("Auth Request Creation failed - " + e.getMessage());
                     }
-                    if (authRequest != null) {
-                        try {
-                            PendingIntent postAuthIntent = SdkOAuthTokenHelper.createPostAuthorizationIntent (context, callBackActivity, authRequest, SdkOAuthHelper.getAuthState ());
-                            CustomTabsIntent tabsIntent = SdkOAuthHelper.getInstance ().getAuthService ().createCustomTabsIntentBuilder ().setToolbarColor (Integer.parseInt ("FF4081", 16)).build ();
-                            SdkOAuthHelper.getInstance ().getAuthService ().performAuthorizationRequest (authRequest, postAuthIntent, tabsIntent);
+                    if(authRequest != null){
+                        try{
+                            PendingIntent postAuthIntent = SdkOAuthTokenHelper.createPostAuthorizationIntent(context, callBackActivity, authRequest, SdkOAuthHelper.getAuthState());
+                            CustomTabsIntent tabsIntent = SdkOAuthHelper.getInstance().getAuthService().createCustomTabsIntentBuilder().setToolbarColor(Integer.parseInt("FF4081", 16)).build();
+                            SdkOAuthHelper.getInstance().getAuthService().performAuthorizationRequest(authRequest, postAuthIntent, tabsIntent);
 
-                        } catch (SdkException e) {
-                            Log.e (logTag, "performAuthorizationRequest request failed as AuthState get failed." + e.getMessage ());
+                        }catch(SdkException e){
+                            Log.e(logTag, "performAuthorizationRequest request failed as AuthState get failed." + e.getMessage());
                         }
                     }
                 }
@@ -409,48 +407,47 @@ public void doOAuth3Legged(@NonNull SdkIdentityProvider idp, final @NonNull Cont
             }
         }
     };
-    idp.retrieveConfig (retrieveCallback);
+    idp.retrieveConfig(retrieveCallback);
 }
 
 /**
  * Disposes the SdkAuthentication State
  */
-public void disposeAuthenticationState() {
-    getAuthService ().dispose ();
-    if (mAuthState != null) {
-        mAuthState.resetAuthState ();
+public void disposeAuthenticationState(){
+    getAuthService().dispose();
+    if(mAuthState != null){
+        mAuthState.resetAuthState();
     }
-    this.resetAuthStateInSharedPrefs ();
+    this.resetAuthStateInSharedPrefs();
     isSdkOAuthHelperInitialized = false;
 }
 
 /**
  * Initializes a request, by adding the Authorization header to the request.
- *
  */
 @Override
-    public Map<String, String> getHeader() {
-        Map<String, String> header = new HashMap<>();
-        try {
-            if (getAuthState() != null && getAuthState().getAccessToken() != null) {
-                String token = mAuthState.getAccessToken();
-                header.put("authorization", "Bearer " + token);
-            }
-        } catch (Exception e) {
-            Log.e(logTag, " HttpRequestInitializer initialize exception e =" + e.getMessage());
+public Map<String, String> initializeHeader(){
+    Map<String, String> header = new HashMap<>();
+    try{
+        if(getAuthState() != null && getAuthState().getAccessToken() != null){
+            String token = mAuthState.getAccessToken();
+            header.put("authorization", "Bearer " + token);
         }
-        return header;
+    }catch(Exception e){
+        Log.e(logTag, " HttpRequestInitializer initialize exception e =" + e.getMessage());
     }
+    return header;
+}
 
 /**
  * Log out the user
  */
-public void logoutUser() {
-    disposeAuthenticationState ();
-    resetAuthStateInSharedPrefs ();
-    if (mAuthState != null) {
-        mAuthState.resetAuthState ();
-        resetAuthStateInSharedPrefs ();
+public void logoutUser(){
+    disposeAuthenticationState();
+    resetAuthStateInSharedPrefs();
+    if(mAuthState != null){
+        mAuthState.resetAuthState();
+        resetAuthStateInSharedPrefs();
     }
 }
 
@@ -460,12 +457,12 @@ public void logoutUser() {
  * @return true if available, false if NOT available
  */
 @Override
-public boolean isAvailable() {
-    try {
-        if (TextUtils.isEmpty (getAuthState ().getAccessToken ())) {
+public boolean isAvailable(){
+    try{
+        if(TextUtils.isEmpty(getAuthState().getAccessToken())){
             return false;
         }
-    } catch (SdkException e) {
+    }catch(SdkException e){
         return false;
     }
     return true;
@@ -476,7 +473,7 @@ public boolean isAvailable() {
  *
  * @return selectedIDP {@link SdkIdentityProvider} object
  */
-public SdkIdentityProvider getSelectedIDP() {
+public SdkIdentityProvider getSelectedIDP(){
     return mSelectedIDP;
 }
 
@@ -485,7 +482,7 @@ public SdkIdentityProvider getSelectedIDP() {
  *
  * @param selectedIDP {@link SdkIdentityProvider} object
  */
-private void setSelectedIDP(@NonNull SdkIdentityProvider selectedIDP) {
+private void setSelectedIDP(@NonNull SdkIdentityProvider selectedIDP){
     mSelectedIDP = selectedIDP;
 }
 
@@ -494,7 +491,7 @@ private void setSelectedIDP(@NonNull SdkIdentityProvider selectedIDP) {
  *
  * @return @see AuthorizationService
  */
-AuthorizationService getAuthService() {
+AuthorizationService getAuthService(){
     return mAuthService;
 }
 

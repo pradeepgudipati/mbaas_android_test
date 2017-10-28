@@ -1,5 +1,3 @@
-
-
 package com.axway.mbaas_preprod;
 
 
@@ -72,7 +70,6 @@ public class SdkClient implements SdkConstants{
  * SdkClient singleton object
  */
 private static SdkClient mSdkClientInstance = null;
-
 /**
  * LOG Tag string
  */
@@ -93,14 +90,7 @@ private Map<String, String> defaultHeaders;
  * Used if Developer wants to force a certain Auth Type
  */
 private String mForceAuthName;
-
 private OkHttpClient mOkHttpClient = null;
-
-public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-private static final int CONNECT_TIMEOUT_IN_SECS = 10;
-private static final int READ_TIMEOUT_IN_SECS = 30;
-private static final int WRITE_TIMEOUT_IN_SECS = 10;
 
 
 /**
@@ -108,8 +98,8 @@ private static final int WRITE_TIMEOUT_IN_SECS = 10;
  */
 private SdkClient(){
 
-    // authentications hashmap requires all types of authentications objects. ( SdkOAuthHelper
-    // types are
+    // authentications hashmap requires all types of authentications objects.
+    // ( SdkOAuthHelper  types are
     // all combined into One SdkOAuthHelper Object).
     this.authentications = new HashMap<>();
     HashMap<String, SdkIdentityProvider> providers = SdkIdentityProvider.getAllIdentityProviders();
@@ -245,6 +235,16 @@ public void logoutUser(){
     for(SdkAuthentication auth : authentications.values()){
         auth.logoutUser();
     }
+    // Creating a new object of Cookie Handler clears the cookies.
+    cookieJar = new CookieHandler();
+}
+
+/**
+ * Clears the cookies in the store.
+ */
+public void clearCookies(){
+    // Creating a new object of Cookie Handler clears the cookies.
+    cookieJar = new CookieHandler();
 }
 
 /**
@@ -608,7 +608,6 @@ private Response getAPIResponse(@Nullable String path, @NonNull String method, @
 }
 
 
-
 private void applyAuthHeaders(String[] authNames, Headers.Builder builder, GenericUrl url, Request.Builder requestBuilder){
     HttpUrl.Builder httpUrlBuilder = HttpUrl.parse(url.toString()).newBuilder();
 
@@ -616,13 +615,13 @@ private void applyAuthHeaders(String[] authNames, Headers.Builder builder, Gener
         if(TextUtils.isEmpty(mForceAuthName)){
             // If developer has not forced the Authentication then authenticate the API with the first item in the authNames array
             if(authentications.get(authNames[0]) != null){
-                Map headers = authentications.get(authNames[0]).getHeader();
+                Map headers = authentications.get(authNames[0]).initializeHeader();
                 addHeader(headers, builder);
             }
         }else{
             // If the developer has forced a particular Authentication then check if that API allows it .
             if(Arrays.asList(authNames).contains(mForceAuthName)){
-                Map header = authentications.get(mForceAuthName).getHeader();
+                Map header = authentications.get(mForceAuthName).initializeHeader();
 
                 if(mForceAuthName.equalsIgnoreCase(SdkConstants.NAME_API_AUTH)){
                     SdkAPIKeyAuth apiKeyAuth = (SdkAPIKeyAuth) authentications.get(mForceAuthName);
@@ -642,14 +641,14 @@ private void applyAuthHeaders(String[] authNames, Headers.Builder builder, Gener
             String idpName2 = SdkIdentityProvider.getAllIDPNames().get(1);
 
             if(idpName1 == SdkConstants.NAME_NO_AUTH){
-                Map headers = authentications.get(idpName2).getHeader();
+                Map headers = authentications.get(idpName2).initializeHeader();
                 addHeader(headers, builder);
             }else{
-                Map headers = authentications.get(idpName1).getHeader();
+                Map headers = authentications.get(idpName1).initializeHeader();
                 addHeader(headers, builder);
             }
         }else if(SdkIdentityProvider.getAllIDPNames().size() == 1 && !SdkIdentityProvider.getAllIDPNames().get(0).equalsIgnoreCase(SdkConstants.NAME_NO_AUTH)){
-            Map headers = authentications.get(SdkIdentityProvider.getAllIDPNames().get(0)).getHeader();
+            Map headers = authentications.get(SdkIdentityProvider.getAllIDPNames().get(0)).initializeHeader();
             addHeader(headers, builder);
         }
     }
@@ -731,20 +730,7 @@ private OkHttpClient createOkHttpClient(){
                 }
             });
         }
-        CookieJar cookieJar = new CookieJar(){
-            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 
-            @Override
-            public void saveFromResponse(HttpUrl url, List<Cookie> cookies){
-                cookieStore.put(url.host(), cookies);
-            }
-
-            @Override
-            public List<Cookie> loadForRequest(HttpUrl url){
-                List<Cookie> cookies = cookieStore.get(url.host());
-                return cookies != null ? cookies : new ArrayList<Cookie>();
-            }
-        };
         builder.cookieJar(cookieJar);
         builder.connectTimeout(CONNECT_TIMEOUT_IN_SECS, TimeUnit.SECONDS);
         builder.writeTimeout(WRITE_TIMEOUT_IN_SECS, TimeUnit.SECONDS);
@@ -759,5 +745,43 @@ private OkHttpClient createOkHttpClient(){
         e.printStackTrace();
     }
     return null;
+}
+
+
+private CookieJar cookieJar = new CookieHandler();
+
+public class CookieHandler implements CookieJar{
+
+    private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+
+    /**
+     * Saves {@code cookies} from an HTTP response to this store according to this jar's policy.
+     * <p>
+     * <p>Note that this method may be called a second time for a single HTTP response if the response
+     * includes a trailer. For this obscure HTTP feature, {@code cookies} contains only the trailer's
+     * cookies.
+     *
+     * @param url
+     * @param cookies
+     */
+    @Override
+    public void saveFromResponse(HttpUrl url, List<Cookie> cookies){
+        cookieStore.put(url.host(), cookies);
+    }
+
+    /**
+     * Load cookies from the jar for an HTTP request to {@code url}. This method returns a possibly
+     * empty list of cookies for the network request.
+     * <p>
+     * <p>Simple implementations will return the accepted cookies that have not yet expired and that
+     * {@linkplain Cookie#matches match} {@code url}.
+     *
+     * @param url
+     */
+    @Override
+    public List<Cookie> loadForRequest(HttpUrl url){
+        List<Cookie> cookies = cookieStore.get(url.host());
+        return cookies != null ? cookies : new ArrayList<Cookie>();
+    }
 }
 }
