@@ -1,5 +1,5 @@
 
-
+ 
 
 package com.axway.mbaas_preprod;
 
@@ -36,6 +36,7 @@ public class Result {
             }
         }
     }
+
 
     public boolean isSuccessful() {
         return statusCode >= 200 && statusCode <= 299;

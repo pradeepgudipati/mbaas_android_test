@@ -6,11 +6,10 @@ package com.axway.mbaas_preprod.auth;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.google.api.client.util.Base64;
-import com.google.api.client.util.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Credentials;
 
 /**
  * Handles HTTP Basic based Authentication
@@ -66,9 +65,8 @@ public class SdkHttpBasicAuth implements SdkAuthentication {
         if (username == null && password == null) {
             return header;
         }
-        String userPass = username + ":" + password;
-        String encoded = Base64.encodeBase64String(StringUtils.getBytesUtf8(userPass));
-        header.put("Authorization", "Basic " + encoded);
+        String credential = Credentials.basic(username, password);
+        header.put("Authorization", "Basic " + credential);
         return header;
     }
 

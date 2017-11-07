@@ -36,9 +36,7 @@ allprojects {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'axway_oauth_v8', ext: 'aar')
-    compile('com.google.http-client:google-http-client-gson:1.21.0', {
-        exclude group: 'com.google.code.findbugs'
-    })
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     compile 'com.android.support:customtabs:25.4.0'
@@ -47,11 +45,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.4.0'
     compile 'com.android.support:design:25.4.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-
-
 }
 
-configurations {
-    compile.exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-}
 apply plugin: 'com.google.gms.google-services'

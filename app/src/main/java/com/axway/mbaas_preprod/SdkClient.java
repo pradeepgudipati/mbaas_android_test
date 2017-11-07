@@ -1,5 +1,5 @@
 
-
+ 
 
 package com.axway.mbaas_preprod;
 
@@ -14,6 +14,7 @@ import com.axway.mbaas_preprod.auth.SdkAuthentication;
 import com.axway.mbaas_preprod.auth.SdkHttpBasicAuth;
 import com.axway.mbaas_preprod.auth.SdkIdentityProvider;
 import com.axway.mbaas_preprod.auth.SdkOAuthHelper;
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
 import net.openid.appauth.AuthorizationRequest;
@@ -228,7 +229,6 @@ public class SdkClient implements SdkConstants {
         }
         throw new SdkException(SdkException.AUTH_CONFIG_NOT_AVAILABLE, "No API key authentication configured!");
     }
-
     /**
      * Calls the respective Auth method's logout.
      */
@@ -414,25 +414,29 @@ public class SdkClient implements SdkConstants {
      * @throws SdkException In case there is an error
      */
     public Object deserialize(Result result, java.lang.reflect.Type t) throws SdkException {
-        String json = result.getBody();
-        try {
-            if (String.class.equals(t)) {
-                if (json != null && json.startsWith("\"") && json.endsWith("\"") && json.length() > 1) {
-                    return json.substring(1, json.length() - 1);
+        if(result != null) {
+            String json = result.getBody();
+            try {
+                if (String.class.equals(t)) {
+                    if (json != null && json.startsWith("\"") && json.endsWith("\"") && json.length() > 1) {
+                        return json.substring(1, json.length() - 1);
+                    } else {
+                        return json;
+                    }
+                } else if (JSONUtil.isJSONValid(json) && JSONObject.class.equals(t)) {
+                    return new JSONObject(json);
                 } else {
-                    return json;
+                    return JSONUtil.deserialize(json, t);
                 }
-            } else if (JSONUtil.isJSONValid(json) && JSONObject.class.equals(t)) {
-                return new JSONObject(json);
-            } else {
-                return JSONUtil.deserialize(json, t);
+            } catch (JsonParseException e) {
+                // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
+                throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
+            } catch (JSONException e) {
+                // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
+                throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
             }
-        } catch (JsonParseException e) {
-            // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
-            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
-        } catch (JSONException e) {
-            // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
-            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
+        }else{
+            throw new SdkException(SdkException.MISSING_PARAMETER,"Empty Result");
         }
     }
 
@@ -492,24 +496,25 @@ public class SdkClient implements SdkConstants {
             throws SdkException {
 
         Response response = getAPIResponse(path, method, queryParams, body, headerParams, formParams, accept, contentType, authNames);
-        Log.d(LOG_TAG, response.toString());
         if (response != null) {
+            Log.d(LOG_TAG, response.toString());
             if (response.isSuccessful()) {
                 //return response.body().string();
                 return new Result(response);
             }
             // If we get a 4XX or 5XX, throw APIException, don't return response...
             try {
-                throw new SdkException(response.code(), response.message(), response.headers(), response.peekBody(1024).string());
+                throw new SdkException(response.code(), response.message(),response.headers(),response.peekBody(1024).string());
             } catch (IOException e) {
                 throw new SdkException(response.code(), response.message());
             }
         } else {
-            return null;
+            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR,"No Response received.");
         }
     }
 
-    /**
+
+   /**
      * Calls the required HTTP API's to initiate the call for the REST API along with the Authentication
      *
      * @param path         String containing the API Path
@@ -536,38 +541,31 @@ public class SdkClient implements SdkConstants {
 
         Headers.Builder headerBuilder = new Headers.Builder();
         final HttpUrl.Builder urlBuilder = buildUrl(path, queryParams);
-        // Headers
-        // "Accept", "Accept-Encoding", "Authorization", "Cache-Control", "Content-Encoding",
-        // "Content-Length", "Content-MD5",
-        // "Content-Range", "Content-Type", "Cookie", "Date", "ETag", "Expires",
-        // "If-Modified-Since", "If-Match", "If-None-Match",
-        // "If-Unmodified-Since", "If-Range", "Last-Modified", "Location", "MIME-Version", "Range",
-        // "Retry-After", "User-Agent",
-        // "WWW-Authenticate", "Age"
 
         // add default headers
         addHeader(defaultHeaders, headerBuilder);
 
-        // adding header params
+        // adding header params specified by the API
         addHeader(headerParams, headerBuilder);
 
-        // then do Accept
+        // then add Accept header
         if (accept == null) {
             headerBuilder.add("Accept", "application/json");
         } else {
             headerBuilder.add("Accept", accept);
         }
 
-        Headers headers = headerBuilder.build();
         Request request = null;
         RequestBody content = null;
-        Request.Builder requestBuilder = new Request.Builder()
-                .headers(headers);
+        Request.Builder requestBuilder = new Request.Builder();
+        // add the Authentication headers
+        addAuthHeaders(authNames, headerBuilder, urlBuilder);
+        // Set the URL to the request builder
+        requestBuilder.url(urlBuilder.build());
+        //set the headers for the request builder
+        requestBuilder.headers(headerBuilder.build());
 
 
-        applyAuthHeaders(authNames, headerBuilder, urlBuilder, requestBuilder);
-
-        // Method
         switch (finalMethod) {
             case "GET":
                 request = requestBuilder.build();
@@ -605,12 +603,19 @@ public class SdkClient implements SdkConstants {
                     }
                     request = requestBuilder.post(multiPartFormData.build()).build();
                 } else {
-                    FormBody.Builder requestBodyForm = new FormBody.Builder();
-                    for (Map.Entry<String, Object> entry : formParams.entrySet()) {
-                        requestBodyForm.add(entry.getKey(), entry.getValue().toString());
-                    }
-                    content = requestBodyForm.build();
+                    if (formParams != null && formParams.size() > 0 && body == null) {
+                        FormBody.Builder requestBodyForm = new FormBody.Builder();
+                        for (Map.Entry<String, Object> entry : formParams.entrySet()) {
+                            requestBodyForm.add(entry.getKey(), entry.getValue().toString());
+                        }
 
+                        content = requestBodyForm.build();
+                    } else if (body != null) {
+                        // handle body as JSON
+                        Gson gson = new Gson();
+                        String postJsonBody = gson.toJson(body);
+                        content = RequestBody.create(JSON, postJsonBody);
+                    }
                     if ("PUT".equalsIgnoreCase(finalMethod)) {
                         request = requestBuilder.put(content).build();
                     } else {
@@ -632,9 +637,11 @@ public class SdkClient implements SdkConstants {
     }
 
 
-    private void applyAuthHeaders(String[] authNames, Headers.Builder headerBuilder, HttpUrl.Builder urlBuilder, Request.Builder requestBuilder) {
+    private void addAuthHeaders(String[] authNames, Headers.Builder headerBuilder, HttpUrl.Builder urlBuilder) {
 
-        if (authNames.length > 0) {
+        //If no authentication method is defined
+        if (authNames != null && authNames.length > 0) {
+            //If a authentication is not set by the developer use the first one in the list
             if (TextUtils.isEmpty(mForceAuthName)) {
                 // If developer has not forced the Authentication then authenticate the API with the first item in the authNames array
                 if (authentications.get(authNames[0]) != null) {
@@ -642,25 +649,30 @@ public class SdkClient implements SdkConstants {
                     addHeader(headers, headerBuilder);
                 }
             } else {
-                // If the developer has forced a particular Authentication then check if that API allows it .
+                //if an authentication is set by developer
+                Map<String, String> header;
+                //Check if the authentication type is available
                 if (Arrays.asList(authNames).contains(mForceAuthName)) {
-                    Map<String, String> header = authentications.get(mForceAuthName).initializeHeader();
-
-                    if (mForceAuthName.equalsIgnoreCase(SdkConstants.NAME_API_AUTH)) {
+                    header = authentications.get(mForceAuthName).initializeHeader();
+                    if (authentications.get(mForceAuthName) instanceof SdkAPIKeyAuth) {
+                        // if authentication is of type = Api Key,  check if it is a http header or URL query type
                         SdkAPIKeyAuth apiKeyAuth = (SdkAPIKeyAuth) authentications.get(mForceAuthName);
                         if ("query".equalsIgnoreCase(apiKeyAuth.getLocation())) {
+                            // Add to URL and exit from the method
                             for (Map.Entry<String, String> param : header.entrySet()) {
                                 urlBuilder.addQueryParameter(param.getKey(), param.getValue());
                             }
-                        } else {
-                            addHeader(header, headerBuilder);
+                            //reset the header since it is not a http header
+                            header = new HashMap<>();
                         }
-                    } else {
+                    }
+                    // add header if it is not empty
+                    if (!header.isEmpty()) {
                         addHeader(header, headerBuilder);
                     }
                 }
             }
-        } else if (authNames == null || authNames.length == 0) {
+        } else {
             if (SdkIdentityProvider.getAllIDPNames().size() == 2 && SdkIdentityProvider.getAllIDPNames().contains(SdkConstants.NAME_NO_AUTH)) {
                 String idpName1 = SdkIdentityProvider.getAllIDPNames().get(0);
                 String idpName2 = SdkIdentityProvider.getAllIDPNames().get(1);
@@ -677,12 +689,12 @@ public class SdkClient implements SdkConstants {
                 addHeader(headers, headerBuilder);
             }
         }
-        requestBuilder.url(urlBuilder.build());
+
     }
 
     /**
      * Adds the header to the Request
-     */
+    */
     private void addHeader(Map<String, String> map, Headers.Builder builder) {
         if (map != null && map.size() > 0) {
             Iterator it = map.entrySet().iterator();
