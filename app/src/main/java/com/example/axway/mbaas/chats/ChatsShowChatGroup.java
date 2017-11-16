@@ -54,7 +54,6 @@ public class ChatsShowChatGroup extends Activity {
      public void onResponse() {
          if (responseHandler != null) {
              try {
-                 ArrayList<JSONObject> oldTableData = tableData;
                  tableData = new ArrayList<JSONObject>();
                     JSONArray chats = responseHandler.getJSONObject("response").getJSONArray("chats");
                  for (int i = 0; i < chats.length(); i++) {
@@ -71,10 +70,6 @@ public class ChatsShowChatGroup extends Activity {
                          pingData.put("where", where.toString());
                          queryWhere = pingData.get("where").toString();
                      }
-                 }
-
-                 if (oldTableData != null) {
-                     tableData.addAll(oldTableData);
                  }
 
                  if (currentActivity == null) {
@@ -223,20 +218,27 @@ public class ChatsShowChatGroup extends Activity {
 
         // Start a timer to poll the server or new messages every 5 seconds
         timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run()
+//            {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ping();
+//                    }
+//
+//                });
+//
+//            }
+//        }, 500, 500000000);
+
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
-            public void run()
-            {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ping();
-                    }
-
-                });
+            public void run() {
+                ping();
             }
-        }, 1000, 500000000);
-
+        },500,10000);
         ping();
     }
 

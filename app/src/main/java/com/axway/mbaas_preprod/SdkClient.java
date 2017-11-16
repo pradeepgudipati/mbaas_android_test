@@ -456,6 +456,7 @@ public class SdkClient implements SdkConstants {
         HttpUrl basePathUrl = HttpUrl.parse(BASE_PATH_URL);
 
         url.host(basePathUrl.host());
+        url.port(basePathUrl.port());
         url.scheme(basePathUrl.scheme());
         for (String pathSegment : basePathUrl.pathSegments()) {
             url.addEncodedPathSegment(pathSegment);
