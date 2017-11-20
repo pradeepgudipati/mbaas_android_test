@@ -602,7 +602,12 @@ public class SdkClient implements SdkConstants {
                             multiPartFormData.addFormDataPart(entry.getKey(), entry.getValue().toString());
                         }
                     }
-                    request = requestBuilder.post(multiPartFormData.build()).build();
+                    if ("PUT".equalsIgnoreCase(finalMethod)) {
+                        request = requestBuilder.put(multiPartFormData.build()).build();
+                    } else {
+                        request = requestBuilder.post(multiPartFormData.build()).build();
+                    }
+
                 } else {
                     if (formParams != null && formParams.size() > 0 && body == null) {
                         FormBody.Builder requestBodyForm = new FormBody.Builder();
