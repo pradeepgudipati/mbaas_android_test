@@ -63,7 +63,7 @@ public class AppsAPI {
 		if (description != null) formParams.put("description", description);
 		if (orgId != null) formParams.put("org_id", orgId);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -109,7 +109,7 @@ public class AppsAPI {
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -169,7 +169,7 @@ public class AppsAPI {
 		if (secureIdentity != null) formParams.put("secure_identity", secureIdentity);
 		if (orgId != null) formParams.put("org_id", orgId);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -215,7 +215,7 @@ public class AppsAPI {
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -261,7 +261,7 @@ public class AppsAPI {
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -315,7 +315,7 @@ public class AppsAPI {
 		if (certificateProd != null) formParams.put("certificate_prod", certificateProd);
 		if (productionCertPassword != null) formParams.put("production_cert_password", productionCertPassword);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -367,7 +367,7 @@ public class AppsAPI {
 		if (androidGcmApikey != null) formParams.put("android_gcm_apikey", androidGcmApikey);
 		if (androidGcmSenderId != null) formParams.put("android_gcm_sender_id", androidGcmSenderId);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -417,7 +417,7 @@ public class AppsAPI {
 		if (wnsSid != null) formParams.put("wns_sid", wnsSid);
 		if (wnsClientSecret != null) formParams.put("wns_client_secret", wnsClientSecret);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -467,7 +467,7 @@ public class AppsAPI {
 		if (groupId != null) formParams.put("group_id", groupId);
 		if (appId != null) formParams.put("app_id", appId);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -515,7 +515,7 @@ public class AppsAPI {
 
 		if (appId != null) formParams.put("app_id", appId);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -591,7 +591,7 @@ public class AppsAPI {
 		if (devMode != null) formParams.put("dev_mode", devMode);
 		if (replacementEmail != null) formParams.put("replacement_email", replacementEmail);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"

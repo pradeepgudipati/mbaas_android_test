@@ -6,6 +6,9 @@
 
 package com.example.axway.mbaas.users;
 
+import static com.example.axway.mbaas.Utils.handleException;
+import static com.example.axway.mbaas.Utils.handleSDKException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,7 +22,6 @@ import android.widget.EditText;
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.UsersAPI;
-import com.axway.mbaas_preprod.auth.SdkCookiesHelper;
 import com.example.axway.mbaas.R;
 
 import org.json.JSONException;
@@ -27,9 +29,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.example.axway.mbaas.Utils.handleException;
-import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class UsersLogin extends Activity {
     private static UsersLogin currentActivity;
@@ -60,6 +59,9 @@ public class UsersLogin extends Activity {
 
         fields.add(usernameField);
         fields.add(passwordField);
+
+        usernameField.setText("bahubhali");
+        passwordField.setText("password");
     }
 
     @Override
@@ -94,12 +96,6 @@ public class UsersLogin extends Activity {
 
         @Override
         protected void onPreExecute() {
-            try {
-                if (SdkCookiesHelper.getInstance().isAvailable())
-                    SdkCookiesHelper.getInstance().logoutUser();
-            } catch (SdkException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override

@@ -6,6 +6,8 @@
 
 package com.example.axway.mbaas.accessControlLists;
 
+import static com.example.axway.mbaas.Utils.handleSDKException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -31,8 +33,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class AccessControlListsShow extends Activity {
 	private static final int READER = 1;
@@ -154,8 +154,9 @@ public class AccessControlListsShow extends Activity {
         HashMap<String, Object> data = new HashMap<String, Object>();
         @Override
         protected void onPreExecute(){
-            if (accessControlListsNameField.getText().toString().length() <= 0) {
+            if (accessControlListsNameField == null || accessControlListsNameField.getText().toString().length() <= 0) {
                 accessControlListsNameField.requestFocus();
+                this.cancel(true);
                 return;
             }
 
@@ -236,7 +237,7 @@ public class AccessControlListsShow extends Activity {
 
         @Override
         protected void onPreExecute() {
-            if (accessControlListsNameField.getText().toString().length() <= 0) {
+            if (accessControlListsNameField.getText()!=null && accessControlListsNameField.getText().toString().length() <= 0) {
                 accessControlListsNameField.requestFocus();
                 return;
             }

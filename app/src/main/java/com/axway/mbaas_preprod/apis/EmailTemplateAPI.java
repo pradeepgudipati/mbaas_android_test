@@ -71,7 +71,7 @@ public class EmailTemplateAPI {
 		if (body != null) formParams.put("body", body);
 		if (plainBody != null) formParams.put("plain_body", plainBody);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -131,7 +131,7 @@ public class EmailTemplateAPI {
 		if (body != null) formParams.put("body", body);
 		if (plainBody != null) formParams.put("plain_body", plainBody);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -183,7 +183,7 @@ public class EmailTemplateAPI {
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -235,7 +235,7 @@ public class EmailTemplateAPI {
 
 		if (emailTemplateId != null) formParams.put("email_template_id", emailTemplateId);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -281,7 +281,7 @@ public class EmailTemplateAPI {
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"

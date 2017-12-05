@@ -9,9 +9,13 @@ package com.example.axway.mbaas;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.axway.mbaas_preprod.JSONUtil;
 import com.axway.mbaas_preprod.SdkException;
+
+import org.json.JSONObject;
 
 
 public class Utils {
@@ -41,13 +45,27 @@ public class Utils {
     }
 
     public static void handleSDKException(final SdkException e, final Activity activity) {
+        e.printStackTrace();
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 activity);
         String errMsg = e.getMessage();
         Log.d("SDK Error Message: ", errMsg);
-        String eMessage = errMsg.substring(0, errMsg.indexOf("{"));
-        eMessage = eMessage + errMsg.substring(errMsg.indexOf("message") + 9, errMsg.indexOf("method_name") - 3);
-        alertDialogBuilder.setTitle("Error!").setMessage(eMessage)
+        String eMessage = "";
+        JSONObject responseJSON = null;
+        try {
+            if (!TextUtils.isEmpty(e.getResponseBody())) {
+                eMessage = e.getResponseBody();
+                eMessage = eMessage.replace("\n","");
+                if(JSONUtil.isJSONValid(eMessage)){
+                    responseJSON = JSONUtil.stringToJSONObject(eMessage);
+                }
+                eMessage = responseJSON.toString();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        alertDialogBuilder.setTitle("Error!").setMessage(errMsg + "\n" + eMessage)
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override

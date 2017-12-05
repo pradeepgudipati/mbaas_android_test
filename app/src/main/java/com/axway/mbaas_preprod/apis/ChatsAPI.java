@@ -86,7 +86,7 @@ single line (`false`). Default is `false`.
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -132,7 +132,7 @@ single line (`false`). Default is `false`.
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -261,7 +261,7 @@ single line (`false`). Default is `false`.
 		if (responseJsonDepth != null) formParams.put("response_json_depth", responseJsonDepth);
 		if (prettyJson != null) formParams.put("pretty_json", prettyJson);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -324,7 +324,7 @@ single line (`false`). Default is `false`.
 		if (suId != null) formParams.put("su_id", suId);
 		if (prettyJson != null) formParams.put("pretty_json", prettyJson);
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"
@@ -453,7 +453,7 @@ Default is 1, valid range is 1 to 8.
 
 
 		
-		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the accepts array.
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
 		// Please set the order to have multipart/form-data as the first entry 
 		// e.g.   final String[] contentTypes = {
         //             "multipart/form-data", "application/x-www-form-urlencoded"

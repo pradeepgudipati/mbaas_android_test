@@ -1,5 +1,5 @@
 
-
+ 
 
 package com.axway.mbaas_preprod;
 
@@ -11,36 +11,24 @@ import android.util.Log;
 
 import com.axway.mbaas_preprod.auth.SdkAPIKeyAuth;
 import com.axway.mbaas_preprod.auth.SdkAuthentication;
-import com.axway.mbaas_preprod.auth.SdkCookiesHelper;
 import com.axway.mbaas_preprod.auth.SdkHttpBasicAuth;
 import com.axway.mbaas_preprod.auth.SdkIdentityProvider;
 import com.axway.mbaas_preprod.auth.SdkOAuthHelper;
-import com.google.api.client.http.EmptyContent;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpContent;
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.UrlEncodedContent;
-import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.http.json.JsonHttpContent;
-import com.google.api.client.json.gson.GsonFactory;
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 
 import net.openid.appauth.AuthorizationRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.URLEncoder;
-import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,18 +37,36 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 
 /**
- * The mbaas_preprod SDK
+ * The petstore SDK
  */
 public class SdkClient implements SdkConstants {
 
@@ -68,7 +74,6 @@ public class SdkClient implements SdkConstants {
      * SdkClient singleton object
      */
     private static SdkClient mSdkClientInstance = null;
-
     /**
      * LOG Tag string
      */
@@ -89,18 +94,19 @@ public class SdkClient implements SdkConstants {
      * Used if Developer wants to force a certain Auth Type
      */
     private String mForceAuthName;
+    private OkHttpClient mOkHttpClient = null;
+
 
     /**
      * Constructor
      */
     private SdkClient() {
 
-        // authentications hashmap requires all types of authentications objects. ( SdkOAuthHelper
-        // types are
+        // authentications hashmap requires all types of authentications objects.
+        // ( SdkOAuthHelper  types are
         // all combined into One SdkOAuthHelper Object).
         this.authentications = new HashMap<>();
         HashMap<String, SdkIdentityProvider> providers = SdkIdentityProvider.getAllIdentityProviders();
-
         this.authentications.put(NAME_API_AUTH, new SdkAPIKeyAuth("query", "key"));
 
         if (providers.size() > 0) {
@@ -118,6 +124,11 @@ public class SdkClient implements SdkConstants {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
         // Use UTC as the default time zone.
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        mOkHttpClient = createOkHttpClient();
+        if (mOkHttpClient == null) {
+            mOkHttpClient = new OkHttpClient();
+        }
 
     }
 
@@ -218,7 +229,6 @@ public class SdkClient implements SdkConstants {
         }
         throw new SdkException(SdkException.AUTH_CONFIG_NOT_AVAILABLE, "No API key authentication configured!");
     }
-
     /**
      * Calls the respective Auth method's logout.
      */
@@ -227,6 +237,16 @@ public class SdkClient implements SdkConstants {
         for (SdkAuthentication auth : authentications.values()) {
             auth.logoutUser();
         }
+        // Creating a new object of Cookie Handler clears the cookies.
+        cookieJar = new CookieHandler();
+    }
+
+    /**
+     * Clears the cookies in the store.
+     */
+    public void clearCookies() {
+        // Creating a new object of Cookie Handler clears the cookies.
+        cookieJar = new CookieHandler();
     }
 
     /**
@@ -386,39 +406,6 @@ public class SdkClient implements SdkConstants {
     }
 
     /**
-     * Serialize the given Java object into string according the given Content-Type (only JSON is supported for now).
-     *
-     * @param obj         @{@link Object} to be serialized
-     * @param contentType {@link String} containing the content-type
-     * @param formParams  {@link Map} of Form Parameters
-     * @return {@link HttpContent}
-     * @throws SdkException if serialize fails
-     */
-    private HttpContent serialize(Object obj, @NonNull String contentType, @NonNull Map<String, Object> formParams) throws SdkException {
-        if (contentType.toLowerCase().startsWith("multipart/form-data")) {
-            return new SdkMultipartFormDataContent(formParams);
-        } else if (contentType.toLowerCase().startsWith("application/x-www-form-urlencoded")) {
-            return new UrlEncodedContent(formParams);
-        } else {
-            try {
-                HttpContent content = new EmptyContent();
-                ;
-                if (obj != null) {
-                    //JsonHttpContent requires a Map. If you pass an Object then the content will be empty when added to the Request.
-                    Type type = new TypeToken<Map<String, String>>() {
-                    }.getType();
-                    Map<String, String> objMap = JSONUtil.getGson().fromJson(obj.toString(), type);
-                    content = new JsonHttpContent(new GsonFactory(), objMap);
-                }
-                return content;
-            } catch (Exception e) {
-                // Log.e(LOG_TAG, "serialize" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage());
-                throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
-            }
-        }
-    }
-
-    /**
      * Deserialize the given JSON Result object into Object ( Only JSON is supported for now).
      *
      * @param result @{@link Result} object to be de-serialized
@@ -427,24 +414,29 @@ public class SdkClient implements SdkConstants {
      * @throws SdkException In case there is an error
      */
     public Object deserialize(Result result, java.lang.reflect.Type t) throws SdkException {
-        String json = result.getBody();
-        try {
-            if (String.class.equals(t)) {
-                if (json != null && json.startsWith("\"") && json.endsWith("\"") && json.length() > 1)
-                    return json.substring(1, json.length() - 1);
-                else
-                    return json;
-            } else if (JSONUtil.isJSONValid(json) && JSONObject.class.equals(t)) {
-                return new JSONObject(json);
-            } else {
-                return JSONUtil.deserialize(json, t);
+        if(result != null) {
+            String json = result.getBody();
+            try {
+                if (String.class.equals(t)) {
+                    if (json != null && json.startsWith("\"") && json.endsWith("\"") && json.length() > 1) {
+                        return json.substring(1, json.length() - 1);
+                    } else {
+                        return json;
+                    }
+                } else if (JSONUtil.isJSONValid(json) && JSONObject.class.equals(t)) {
+                    return new JSONObject(json);
+                } else {
+                    return JSONUtil.deserialize(json, t);
+                }
+            } catch (JsonParseException e) {
+                // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
+                throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
+            } catch (JSONException e) {
+                // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
+                throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
             }
-        } catch (JsonParseException e) {
-            // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
-            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
-        } catch (JSONException e) {
-            // Log.e(LOG_TAG, "deserialize ==" + SdkException.INTERNAL_SERVER_ERROR + e.getMessage(),e);
-            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, e.getMessage());
+        }else{
+            throw new SdkException(SdkException.MISSING_PARAMETER,"Empty Result");
         }
     }
 
@@ -456,17 +448,27 @@ public class SdkClient implements SdkConstants {
      * @param queryParams The query parameters
      * @return The full URL
      */
-    private GenericUrl buildUrl(String path, List<Pair> queryParams) {
+    private HttpUrl.Builder buildUrl(String path, List<Pair> queryParams) {
     /*
      * The base path to put in front of every API call's (relative) path.
      */
-        GenericUrl url = new GenericUrl(BASE_PATH_URL);
-        url.appendRawPath(path);
+        HttpUrl.Builder url = new HttpUrl.Builder();
+        HttpUrl basePathUrl = HttpUrl.parse(BASE_PATH_URL);
 
+        url.host(basePathUrl.host());
+        url.port(basePathUrl.port());
+        url.scheme(basePathUrl.scheme());
+        for (String pathSegment : basePathUrl.pathSegments()) {
+            url.addEncodedPathSegment(pathSegment);
+        }
+        if (path.startsWith("/")) {
+            path = path.substring(1, path.length());
+        }
+        url.addEncodedPathSegments(path);
         if (queryParams != null && !queryParams.isEmpty()) {
             for (Pair param : queryParams) {
                 if (param.getValue() != null) {
-                    url.put(param.getName(), param.getValue());
+                    url.addQueryParameter(param.getName(), param.getValue());
                 }
             }
         }
@@ -474,154 +476,6 @@ public class SdkClient implements SdkConstants {
         return url;
     }
 
-    /**
-     * Calls the required HTTP API's to initiate the call for the REST API along with the Authentication
-     *
-     * @param path         String containing the API Path
-     * @param method       String containing the method ( GET,POST,DELETE etc)
-     * @param queryParams  List of Query Parameters
-     * @param body         Object containing the body
-     * @param headerParams Map of header Parameters
-     * @param formParams   Map of Form Parameters
-     * @param accept       String containing the accept header Parameter
-     * @param contentType  String containing the content-type
-     * @param authNames    List of Auth names allowed as per API.
-     * @return {@see Result} object
-     * @throws SdkException on Error/Exception
-     */
-    private Result getAPIResponse(@Nullable String path, @NonNull String method, @Nullable List<Pair> queryParams, @Nullable Object body, @NonNull Map<String, String> headerParams, @NonNull Map<String, Object> formParams, @Nullable String accept, @Nullable String contentType,
-                                  final @Nullable String[] authNames) throws SdkException {
-
-        if (body != null && !formParams.isEmpty()) {
-            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, "Cannot have body and form params");
-        }
-
-        String finalMethod = method.toUpperCase();
-
-        HttpHeaders headers = new HttpHeaders();
-
-        final GenericUrl url = buildUrl(path, queryParams);
-
-        // Headers
-        // "Accept", "Accept-Encoding", "Authorization", "Cache-Control", "Content-Encoding",
-        // "Content-Length", "Content-MD5",
-        // "Content-Range", "Content-Type", "Cookie", "Date", "ETag", "Expires",
-        // "If-Modified-Since", "If-Match", "If-None-Match",
-        // "If-Unmodified-Since", "If-Range", "Last-Modified", "Location", "MIME-Version", "Range",
-        // "Retry-After", "User-Agent",
-        // "WWW-Authenticate", "Age"
-        if (defaultHeaders != null && defaultHeaders.size() > 0) {
-            headers.putAll(defaultHeaders); // first put defaults...
-        }
-        headers.putAll(headerParams); // then do request specific overrides
-        // then do Accept
-        if (accept == null) {
-            headers.setAccept("application/json");
-        } else {
-            headers.setAccept(accept);
-        }
-
-        HttpTransport transport;
-
-        if (!AuthorizationRequest.isCertificateValidated()) {
-            try {
-                // Log.d(LOG_TAG, "getAPIResponse:: doNotValidateCertificate Mode");
-                transport = new NetHttpTransport.Builder().doNotValidateCertificate().build();
-            } catch (GeneralSecurityException e) {
-                // Log.e(LOG_TAG, "getAPIResponse:: GeneralSecurityException == " + e.getMessage(),e);
-                throw new SdkException(SdkException.TRANSPORT_OBJECT_CREATION_FAILED, "Transport Object Creation Failed");
-            }
-        } else {
-            transport = new NetHttpTransport();
-        }
-        HttpContent content = null;
-        // Method
-        switch (finalMethod) {
-            case "GET":
-            case "DELETE":
-                break;
-            case "PATCH":
-                transport = new ApacheHttpTransport();
-                // fall-through intentionally
-                headers.setContentType(contentType);
-                content = serialize(body, contentType, formParams);
-                break;
-            case "POST":
-            case "PUT":
-                headers.setContentType(contentType);
-                if (contentType.toLowerCase().startsWith("multipart/form-data")) {
-                    headers.setContentType("multipart/form-data; boundary=" + SdkMultipartFormDataContent.BOUNDARY);
-                }
-                content = serialize(body, contentType, formParams);
-                break;
-            default:
-                throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, "unknown method type " + finalMethod);
-        }
-
-        HttpRequestFactory requestFactory = transport.createRequestFactory(new HttpRequestInitializer() {
-            @Override
-            public void initialize(HttpRequest request) throws IOException {
-                try {
-                    request.setUrl(url);
-                    applyRequestInitializer(authNames, request);
-                } catch (SdkException sdkE) {
-                    // Log.e("SdkClient", "SdkException sdk Code -- " + sdkE.getCode() + "-- Message --" + sdkE.getMessage(), sdkE);
-                    // Throw an IOException to stop the next steps
-                    throw new IOException(sdkE.getMessage(), sdkE);
-                }
-            }
-        });
-
-        try {
-            HttpRequest req = requestFactory.buildRequest(finalMethod, url, content);
-            // Get the current set of headers added for authentication and add to headers object.
-            // setHeaders method resets all the headers
-            headers.fromHttpHeaders(req.getHeaders());
-            req.setHeaders(headers);
-            //Use the below method if you want Logging.
-            enableLogging(req);
-            return new Result(req.execute());
-        } catch (Exception e) {
-            Log.e("SdkClient", e.getMessage());
-            return new Result(e, authNames, authentications);
-        }
-    }
-
-    /**
-     * Enables logging for the HTTP Request including the CUrl and Request Content printing to Console Log.
-     *
-     * @param request - HTTP Request
-     */
-    public static void enableLogging(HttpRequest request) {
-        request.setCurlLoggingEnabled(true);
-        request.setLoggingEnabled(true);
-        Logger logger = Logger.getLogger(HttpTransport.class.getName());
-        logger.setLevel(Level.ALL);
-        if (request.getContent() != null) {
-            try {
-                Log.i(SdkClient.class.getSimpleName() + "#HttpRequest", "------------- Content -----------\n Length: " + request.getContent().getLength() + ", \n Type: " + request.getContent().getType() + "\n Content: " + JSONUtil.serialize(request.getContent()) + "\n ---------------");
-                Log.i(SdkClient.class.getSimpleName() + "#HttpRequest", "------------- Headers -----------\n " + request.getHeaders().toString() + "\n ---------------");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        logger.addHandler(new Handler() {
-
-            @Override
-            public void close() throws SecurityException {
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void publish(LogRecord record) {
-                // default ConsoleHandler will print &gt;= INFO to System.err
-                Log.i(SdkClient.class.getSimpleName() + "#HttpRequest", record.getMessage());
-            }
-        });
-    }
 
     /**
      * Invoke API by sending HTTP request with the given options.
@@ -637,66 +491,323 @@ public class SdkClient implements SdkConstants {
      * @param authNames    The authentications to apply
      * @return The response body in type of string
      */
-    public Result invokeAPI(@Nullable String path, @NonNull String method, @Nullable List<Pair> queryParams, @Nullable Object body, @NonNull Map<String, String> headerParams, @NonNull Map<String, Object> formParams, @Nullable String accept, @Nullable String contentType, @Nullable String[] authNames)
+
+    public Result invokeAPI(@Nullable String path, @NonNull String method, @Nullable List<Pair> queryParams, @Nullable Object body, @NonNull Map<String, String> headerParams, @NonNull Map<String,
+            Object> formParams, @Nullable String accept, @Nullable String contentType, @Nullable String[] authNames)
             throws SdkException {
 
-        // checkAuthentication(authNames);
-        Result response = getAPIResponse(path, method, queryParams, body, headerParams, formParams, accept, contentType, authNames);
+        Response response = getAPIResponse(path, method, queryParams, body, headerParams, formParams, accept, contentType, authNames);
         if (response != null) {
-
+            Log.d(LOG_TAG, response.toString());
             if (response.isSuccessful()) {
-                return response;
+                //return response.body().string();
+                return new Result(response);
             }
             // If we get a 4XX or 5XX, throw APIException, don't return response...
-            throw new SdkException(response.getError());
+            try {
+                throw new SdkException(response.code(), response.message(),response.headers(),response.peekBody(1024).string());
+            } catch (IOException e) {
+                throw new SdkException(response.code(), response.message());
+            }
         } else {
+            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR,"No Response received.");
+        }
+    }
+
+
+   /**
+     * Calls the required HTTP API's to initiate the call for the REST API along with the Authentication
+     *
+     * @param path         String containing the API Path
+     * @param method       String containing the method ( GET,POST,DELETE etc)
+     * @param queryParams  List of Query Parameters
+     * @param body         Object containing the body
+     * @param headerParams Map of header Parameters
+     * @param formParams   Map of Form Parameters
+     * @param accept       String containing the accept header Parameter
+     * @param contentType  String containing the content-type
+     * @param authNames    List of Auth names allowed as per API.
+     * @return {@see Result} object
+     * @throws SdkException on Error/Exception
+     */
+    private Response getAPIResponse(@Nullable String path, @NonNull String method, @Nullable List<Pair> queryParams, @Nullable Object body, @NonNull Map<String, String> headerParams, @NonNull
+            Map<String, Object> formParams, @Nullable String accept, @Nullable String contentType,
+            final @Nullable String[] authNames) throws SdkException {
+
+        if (body != null && !formParams.isEmpty()) {
+            throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, "Cannot have body and form params");
+        }
+
+        String finalMethod = method.toUpperCase();
+
+        Headers.Builder headerBuilder = new Headers.Builder();
+        final HttpUrl.Builder urlBuilder = buildUrl(path, queryParams);
+
+        // add default headers
+        addHeader(defaultHeaders, headerBuilder);
+
+        // adding header params specified by the API
+        addHeader(headerParams, headerBuilder);
+
+        // then add Accept header
+        if (accept == null) {
+            headerBuilder.add("Accept", "application/json");
+        } else {
+            headerBuilder.add("Accept", accept);
+        }
+
+        Request request = null;
+        RequestBody content = null;
+        Request.Builder requestBuilder = new Request.Builder();
+        // add the Authentication headers
+        addAuthHeaders(authNames, headerBuilder, urlBuilder);
+        // Set the URL to the request builder
+        requestBuilder.url(urlBuilder.build());
+        //set the headers for the request builder
+        requestBuilder.headers(headerBuilder.build());
+
+
+        switch (finalMethod) {
+            case "GET":
+                request = requestBuilder.build();
+                break;
+            case "DELETE":
+                FormBody.Builder deleteBody = new FormBody.Builder();
+                for (Map.Entry<String, Object> entry : formParams.entrySet()) {
+                    deleteBody.add(entry.getKey(), entry.getValue().toString());
+                }
+                content = deleteBody.build();
+                request = requestBuilder.delete(content).build();
+                break;
+            case "PATCH":
+                headerBuilder.add("Content-type", contentType);
+                content = RequestBody.create(JSON, formParams.toString());
+                request = requestBuilder.patch(content).build();
+                break;
+            case "POST":
+            case "PUT":
+                headerBuilder.add("Content-type", contentType);
+                /**
+                 * Please note that file upload will need the content type to be multipart and it should be the only or first type in the contentType string
+                 */
+                if (contentType.toLowerCase().startsWith("multipart/form-data")) {
+                    MultipartBody.Builder multiPartFormData = new MultipartBody.Builder().setType(MultipartBody.FORM);
+                    for (Map.Entry<String, Object> entry : formParams.entrySet()) {
+                        if (entry.getValue() instanceof File) {
+                            File file = (File) entry.getValue();
+                            MediaType mediaType = MediaType.parse(SdkUtils.getMimeType(file.getAbsolutePath()));
+                            RequestBody fileBody = RequestBody.create(mediaType, file);
+                            multiPartFormData.addFormDataPart(entry.getKey(), file.getName(), fileBody);
+                        } else {
+                            multiPartFormData.addFormDataPart(entry.getKey(), entry.getValue().toString());
+                        }
+                    }
+                    if ("PUT".equalsIgnoreCase(finalMethod)) {
+                        request = requestBuilder.put(multiPartFormData.build()).build();
+                    } else {
+                        request = requestBuilder.post(multiPartFormData.build()).build();
+                    }
+
+                } else {
+                    if (formParams != null && formParams.size() > 0 && body == null) {
+                        FormBody.Builder requestBodyForm = new FormBody.Builder();
+                        for (Map.Entry<String, Object> entry : formParams.entrySet()) {
+                            requestBodyForm.add(entry.getKey(), entry.getValue().toString());
+                        }
+
+                        content = requestBodyForm.build();
+                    } else if (body != null) {
+                        // handle body as JSON
+                        Gson gson = new Gson();
+                        String postJsonBody = gson.toJson(body);
+                        content = RequestBody.create(JSON, postJsonBody);
+                    }
+                    if ("PUT".equalsIgnoreCase(finalMethod)) {
+                        request = requestBuilder.put(content).build();
+                    } else {
+                        request = requestBuilder.post(content).build();
+                    }
+
+                }
+                break;
+            default:
+                throw new SdkException(SdkException.INTERNAL_SERVER_ERROR, "unknown method type " + finalMethod);
+        }
+
+        try {
+            return mOkHttpClient.newCall(request).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
 
 
-    /**
-     * Applies headers/query parameters to request.
-     *
-     * @param request @{@link HttpRequest} Object
-     */
-    private void applyRequestInitializer(String[] authNames, HttpRequest request) throws SdkException, IOException {
+    private void addAuthHeaders(String[] authNames, Headers.Builder headerBuilder, HttpUrl.Builder urlBuilder) {
 
-        if (authNames.length > 0) {
+        //If no authentication method is defined
+        if (authNames != null && authNames.length > 0) {
+            //If a authentication is not set by the developer use the first one in the list
             if (TextUtils.isEmpty(mForceAuthName)) {
                 // If developer has not forced the Authentication then authenticate the API with the first item in the authNames array
                 if (authentications.get(authNames[0]) != null) {
-                    authentications.get(authNames[0]).initialize(request);
+                    Map headers = authentications.get(authNames[0]).initializeHeader();
+                    addHeader(headers, headerBuilder);
                 }
             } else {
-                // If the developer has forced a particular Authentication then check if that API allows it .
+                //if an authentication is set by developer
+                Map<String, String> header;
+                //Check if the authentication type is available
                 if (Arrays.asList(authNames).contains(mForceAuthName)) {
-                    authentications.get(mForceAuthName).initialize(request);
-                } else {
-                    throw new SdkException(SdkException.AUTH_CONFIG_NOT_AVAILABLE, "API doesn't allow this type of Authentication");
+                    header = authentications.get(mForceAuthName).initializeHeader();
+                    if (authentications.get(mForceAuthName) instanceof SdkAPIKeyAuth) {
+                        // if authentication is of type = Api Key,  check if it is a http header or URL query type
+                        SdkAPIKeyAuth apiKeyAuth = (SdkAPIKeyAuth) authentications.get(mForceAuthName);
+                        if ("query".equalsIgnoreCase(apiKeyAuth.getLocation())) {
+                            // Add to URL and exit from the method
+                            for (Map.Entry<String, String> param : header.entrySet()) {
+                                urlBuilder.addQueryParameter(param.getKey(), param.getValue());
+                            }
+                            //reset the header since it is not a http header
+                            header = new HashMap<>();
+                        }
+                    }
+                    // add header if it is not empty
+                    if (!header.isEmpty()) {
+                        addHeader(header, headerBuilder);
+                    }
                 }
             }
-        } else if (authNames == null || authNames.length == 0) {
+        } else {
             if (SdkIdentityProvider.getAllIDPNames().size() == 2 && SdkIdentityProvider.getAllIDPNames().contains(SdkConstants.NAME_NO_AUTH)) {
                 String idpName1 = SdkIdentityProvider.getAllIDPNames().get(0);
                 String idpName2 = SdkIdentityProvider.getAllIDPNames().get(1);
 
                 if (idpName1 == SdkConstants.NAME_NO_AUTH) {
-                    authentications.get(idpName2).initialize(request);
+                    Map headers = authentications.get(idpName2).initializeHeader();
+                    addHeader(headers, headerBuilder);
                 } else {
-                    authentications.get(idpName1).initialize(request);
+                    Map headers = authentications.get(idpName1).initializeHeader();
+                    addHeader(headers, headerBuilder);
                 }
             } else if (SdkIdentityProvider.getAllIDPNames().size() == 1 && !SdkIdentityProvider.getAllIDPNames().get(0).equalsIgnoreCase(SdkConstants.NAME_NO_AUTH)) {
-                authentications.get(SdkIdentityProvider.getAllIDPNames().get(0)).initialize(request);
+                Map headers = authentications.get(SdkIdentityProvider.getAllIDPNames().get(0)).initializeHeader();
+                addHeader(headers, headerBuilder);
             }
         }
 
-        try {
-            if (SdkCookiesHelper.getInstance().isAvailable()) {
-                SdkCookiesHelper.getInstance().initialize(request);
+    }
+
+    /**
+     * Adds the header to the Request
+    */
+    private void addHeader(Map<String, String> map, Headers.Builder builder) {
+        if (map != null && map.size() > 0) {
+            Iterator it = map.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                builder.add(pair.getKey().toString(), pair.getValue().toString());
+                it.remove(); // avoids a ConcurrentModificationException
             }
-        } catch (SdkException e) {
-            Log.d(LOG_TAG, "Cookie not initialized");
+        }
+    }
+
+    /**
+     * Creates the OkHttpClient
+     *
+     * @return OkHttpClient Object
+     */
+    private OkHttpClient createOkHttpClient() {
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        try {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            if (!AuthorizationRequest.isCertificateValidated()) {
+                // Bypass certificate validation. (ignore SSL or HTTPS check )
+                final TrustManager[] trustAllCerts = new TrustManager[]{
+                        new X509TrustManager() {
+                            @Override
+                            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                                return new java.security.cert.X509Certificate[]{};
+                            }
+                        }
+                };
+                // Install the all-trusting trust manager
+                final SSLContext sslContext = SSLContext.getInstance("SSL");
+                sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+                // Create an ssl socket factory with our all-trusting manager
+                final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+                builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+                builder.hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+            }
+
+            builder.cookieJar(cookieJar);
+            builder.connectTimeout(CONNECT_TIMEOUT_IN_SECS, TimeUnit.SECONDS);
+            builder.writeTimeout(WRITE_TIMEOUT_IN_SECS, TimeUnit.SECONDS);
+            builder.readTimeout(READ_TIMEOUT_IN_SECS, TimeUnit.SECONDS);
+            builder.addInterceptor(interceptor);
+            builder.followRedirects(true);
+            builder.followSslRedirects(true);
+            return builder.build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } finally {
+            // If the method returns null because of an error this is fail safe.
+            if (mOkHttpClient == null) {
+                mOkHttpClient = new OkHttpClient();
+            }
+        }
+        return mOkHttpClient;
+    }
+
+
+    private CookieJar cookieJar = new CookieHandler();
+
+    public class CookieHandler implements CookieJar {
+
+        private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+
+        /**
+         * Saves {@code cookies} from an HTTP response to this store according to this jar's policy.
+         * <p>
+         * <p>Note that this method may be called a second time for a single HTTP response if the response
+         * includes a trailer. For this obscure HTTP feature, {@code cookies} contains only the trailer's
+         * cookies.
+         */
+        @Override
+        public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+            cookieStore.put(url.host(), cookies);
+        }
+
+        /**
+         * Load cookies from the jar for an HTTP request to {@code url}. This method returns a possibly
+         * empty list of cookies for the network request.
+         * <p>
+         * <p>Simple implementations will return the accepted cookies that have not yet expired and that
+         * {@linkplain Cookie#matches match} {@code url}.
+         */
+        @Override
+        public List<Cookie> loadForRequest(HttpUrl url) {
+            List<Cookie> cookies = cookieStore.get(url.host());
+            return cookies != null ? cookies : new ArrayList<Cookie>();
         }
     }
 }

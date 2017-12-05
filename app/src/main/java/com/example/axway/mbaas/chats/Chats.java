@@ -139,7 +139,7 @@ public class Chats extends Activity {
                             }
                         });
                 }catch (final SdkException e) {
-                    Log.d("ErrorMessage", e.getCause().getMessage());
+                    Log.d("ErrorMessage", e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

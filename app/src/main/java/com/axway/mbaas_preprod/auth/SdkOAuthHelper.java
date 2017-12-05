@@ -14,8 +14,6 @@ import com.axway.mbaas_preprod.SdkUtils;
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.SdkConstants;
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpRequest;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -430,26 +428,24 @@ public void disposeAuthenticationState() {
     isSdkOAuthHelperInitialized = false;
 }
 
-/**
- * Initializes a request, by adding the Authorization header to the request.
- *
- * @param request @see HTTPRequest
- */
-@Override
-public void initialize(HttpRequest request) throws IOException {
+  /**
+   *
+   * return the Header containing the token
+   */
+  @Override
+  public Map<String, String> initializeHeader() {
+    HashMap<String, String> header = new HashMap<>();
     try {
-        HttpHeaders authHeaders = new HttpHeaders ();
-         if (getAuthState() != null && getAuthState().getAccessToken() != null) {
-            String token = mAuthState.getAccessToken();
-            authHeaders.setAuthorization("Bearer " + token);
-            authHeaders.fromHttpHeaders(request.getHeaders());
-            request.setHeaders(authHeaders);
-        }
+      if (getAuthState() != null && getAuthState().getAccessToken() != null) {
+        String token = mAuthState.getAccessToken();
+        header.put("Authorization", "Bearer " + token);
+        return header;
+      }
     } catch (Exception e) {
-        Log.e (logTag, " HttpRequestInitializer initialize exception e =" + e.getMessage ());
-        throw new IOException ("Initialize SdkOAuthHelper Failed");
+      Log.e(logTag, " HttpRequestInitializer initialize exception e =" + e.getMessage());
     }
-}
+    return header;
+  }
 
 /**
  * Log out the user
