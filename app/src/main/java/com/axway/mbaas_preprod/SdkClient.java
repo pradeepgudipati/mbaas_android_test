@@ -468,7 +468,11 @@ public class SdkClient implements SdkConstants {
         if (queryParams != null && !queryParams.isEmpty()) {
             for (Pair param : queryParams) {
                 if (param.getValue() != null) {
-                    url.addQueryParameter(param.getName(), param.getValue());
+                    try {
+                        url.addEncodedQueryParameter(param.getName(),URLEncoder.encode(param.getValue(),"UTF-8"));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
