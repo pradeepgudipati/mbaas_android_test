@@ -59,9 +59,6 @@ public class UsersLogin extends Activity {
 
         fields.add(usernameField);
         fields.add(passwordField);
-
-        usernameField.setText("bahubhali");
-        passwordField.setText("password");
     }
 
     @Override
@@ -142,5 +139,3 @@ public class UsersLogin extends Activity {
         }
     }
 }
-
-
