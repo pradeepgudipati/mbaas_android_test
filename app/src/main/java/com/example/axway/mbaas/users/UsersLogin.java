@@ -11,10 +11,13 @@ import static com.example.axway.mbaas.Utils.handleSDKException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +25,9 @@ import android.widget.EditText;
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.UsersAPI;
+import com.example.axway.mbaas.MainActivity;
 import com.example.axway.mbaas.R;
+import com.example.axway.mbaas.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,6 +85,9 @@ public class UsersLogin extends Activity {
 
     }
 
+
+
+
     private class apiTask extends AsyncTask<Void, Void, JSONObject> {
 
         private HashMap<String, Object> map;
@@ -115,6 +123,19 @@ public class UsersLogin extends Activity {
                 if (exceptionThrown == null && xml.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
                     String userId = successResponse.getJSONObject("response").getJSONArray("users").getJSONObject(0).getString("id");
                     setResult(200);
+
+                    Utils utils = new Utils();
+
+                        utils.setData(UsersLogin.this, userId);
+
+                        utils.getSharedPreferenceData(UsersLogin.this);
+
+//                    SharedPreferences sharedPref2 = getPreferences(MODE_PRIVATE);
+////                    String lgduserId = getResources().getString(R.string.LoggedInUserId);
+//                    String strduserId = sharedPref2.getString(getString(R.string.LoggedInUserId),"");
+//                    Log.i("Userid", strduserId);
+
+
 
                     new AlertDialog.Builder(currentActivity)
                             .setTitle("Success!").setMessage("Logged in! You are now logged in as " + userId)

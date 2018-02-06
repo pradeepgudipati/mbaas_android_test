@@ -8,7 +8,9 @@ package com.example.axway.mbaas;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,6 +18,8 @@ import com.axway.mbaas_preprod.JSONUtil;
 import com.axway.mbaas_preprod.SdkException;
 
 import org.json.JSONObject;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class Utils {
@@ -74,6 +78,27 @@ public class Utils {
                             }
                         })
                 .show();
+
+    }
+
+
+    public void setData(Activity activity, String userId){
+
+        SharedPreferences sharedPref = activity.getSharedPreferences("myprefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+//                    editor.putString(getResources().getString(R.string.LoggedInUserId),userId);
+        editor.putString("test",userId);
+        editor.commit();
+
+    }
+
+    public String getSharedPreferenceData(Activity activity){
+        SharedPreferences sharedPref = activity.getSharedPreferences("myprefs", Context.MODE_PRIVATE);
+//                    String lgduserId = getResources().getString(R.string.LoggedInUserId);
+//                    String strduserId = sharedPref.getString(getResources().getString(R.string.LoggedInUserId),"");
+        String strduserId = sharedPref.getString("test","");
+        Log.i("UserId", strduserId);
+        return strduserId;
 
     }
 

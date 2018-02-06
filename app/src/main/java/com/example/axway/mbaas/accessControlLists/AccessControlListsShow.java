@@ -11,10 +11,12 @@ import static com.example.axway.mbaas.Utils.handleSDKException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -26,6 +28,7 @@ import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.ACLsAPI;
 import com.example.axway.mbaas.R;
 import com.example.axway.mbaas.Utils;
+import com.example.axway.mbaas.users.UsersLogin;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -215,11 +218,13 @@ public class AccessControlListsShow extends Activity {
                     selectedWritersIdList.clear();
                 }
                     new AlertDialog.Builder(currentActivity)
-                            .setTitle("Success!").setMessage("Shown!")
+
+                            .setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
                             .setPositiveButton(android.R.string.ok, null)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
                     showButton3.setVisibility(View.VISIBLE);
+
             } else
                 handleSDKException(exceptionThrown,currentActivity);
             }catch (JSONException e1) {
@@ -229,9 +234,12 @@ public class AccessControlListsShow extends Activity {
         }
     }
 
+
+
+
     private class updateACLTask extends AsyncTask<Void, Void, JSONObject> {
 
-        private SdkException exceptionThrown = null;
+	    private SdkException exceptionThrown = null;
         JSONObject successResponse;
         HashMap<String, Object> data = new HashMap<String, Object>();
 
@@ -262,8 +270,8 @@ public class AccessControlListsShow extends Activity {
                         data.get("writer_ids").toString(),
                         data.get("public_read").toString(),
                         data.get("public_write").toString(), null);
-            } catch (SdkException e) {
-                exceptionThrown = e;
+            } catch (Exception e) {
+                e.printStackTrace();
 
             }
             return successResponse;
@@ -272,11 +280,35 @@ public class AccessControlListsShow extends Activity {
         @Override
         protected void onPostExecute(JSONObject json) {
             if (exceptionThrown == null) {
-                new AlertDialog.Builder(currentActivity)
-                        .setTitle("Success!").setMessage("Shown!")
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
+                try {
+//                    SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+////                    String lgduserId = getResources().getString(R.string.LoggedInUserId);
+////                    String strduserId = sharedPref.getString(getResources().getString(R.string.LoggedInUserId),"");
+//                    String strduserId = sharedPref.getString("test","");
+
+                    String strduserId =  new Utils().getSharedPreferenceData(AccessControlListsShow.this);
+                    if(json != null) {
+                        new AlertDialog.Builder(currentActivity)
+                                .setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+                                .setPositiveButton(android.R.string.ok, null)
+                                .setIcon(android.R.drawable.ic_dialog_info)
+                                .show();
+                    }
+                    else
+                    {
+
+                        String messageStr = (strduserId != null && strduserId.length() > 0) ? "No Data Found" : "Please Login to get data";
+
+                        new AlertDialog.Builder(currentActivity)
+                                .setTitle("Success!").setMessage(messageStr)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .setIcon(android.R.drawable.ic_dialog_info)
+                                .show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 updateButton4.setVisibility(View.VISIBLE);
             } else
                 handleSDKException(exceptionThrown, currentActivity);
