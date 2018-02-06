@@ -25,6 +25,7 @@ import android.widget.EditText;
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.UsersAPI;
+import com.example.axway.mbaas.AxwayApplication;
 import com.example.axway.mbaas.MainActivity;
 import com.example.axway.mbaas.R;
 import com.example.axway.mbaas.Utils;
@@ -124,18 +125,8 @@ public class UsersLogin extends Activity {
                     String userId = successResponse.getJSONObject("response").getJSONArray("users").getJSONObject(0).getString("id");
                     setResult(200);
 
-                    Utils utils = new Utils();
-
-                        utils.setData(UsersLogin.this, userId);
-
-                        utils.getSharedPreferenceData(UsersLogin.this);
-
-//                    SharedPreferences sharedPref2 = getPreferences(MODE_PRIVATE);
-////                    String lgduserId = getResources().getString(R.string.LoggedInUserId);
-//                    String strduserId = sharedPref2.getString(getString(R.string.LoggedInUserId),"");
-//                    Log.i("Userid", strduserId);
-
-
+                    //Save userid for global use
+                    ((AxwayApplication)getApplication()).setLogUserId(userId);
 
                     new AlertDialog.Builder(currentActivity)
                             .setTitle("Success!").setMessage("Logged in! You are now logged in as " + userId)

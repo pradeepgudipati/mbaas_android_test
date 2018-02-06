@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -22,6 +23,7 @@ import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.ACLsAPI;
 import com.axway.mbaas_preprod.apis.UsersAPI;
+import com.example.axway.mbaas.AxwayApplication;
 import com.example.axway.mbaas.R;
 import com.example.axway.mbaas.StableArrayAdapter;
 import com.example.axway.mbaas.Utils;
@@ -44,6 +46,7 @@ private ListView listView;
 private String userId;
 
 private EditText accessControlListsNameField;
+private Button button1;
 
 
 @Override
@@ -69,29 +72,39 @@ protected void onCreate(Bundle savedInstanceState){
 
     accessControlListsNameField.setOnKeyListener(keyListener);
 
-    listView = (ListView) findViewById(R.id.access_control_lists_check_permission_listView);
 
-    final ArrayList<String> loadingList = new ArrayList<String>();
-    loadingList.add("Loading, please wait...");
-    final StableArrayAdapter adapter = new StableArrayAdapter(currentActivity, android.R.layout.simple_list_item_1, loadingList);
-    listView.setAdapter(adapter);
-    new aclUsersTask().execute();
-    listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
+    button1 = (Button) findViewById(R.id.access_control_lists_check_permission_button1);
+    button1.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, final View view, int position, long id){
-            try{
-                if(users.length() > 0){
-                    userId = users.getJSONObject(position).getString("id");
-                    //checkPermission(userId);
-                    new checkPermission().execute();
-                }
-            }catch(JSONException e1){
-                Utils.handleException(e1, currentActivity);
-            }
+        public void onClick(View v) {
+            new checkPermission().execute();
         }
-
     });
+
+
+//    listView = (ListView) findViewById(R.id.access_control_lists_check_permission_listView);
+//
+//    final ArrayList<String> loadingList = new ArrayList<String>();
+//    loadingList.add("Loading, please wait...");
+//    final StableArrayAdapter adapter = new StableArrayAdapter(currentActivity, android.R.layout.simple_list_item_1, loadingList);
+//    listView.setAdapter(adapter);
+//    new aclUsersTask().execute();
+//    listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+//
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, final View view, int position, long id){
+//            try{
+//                if(users.length() > 0){
+//                    userId = users.getJSONObject(position).getString("id");
+//                    //checkPermission(userId);
+//                    new checkPermission().execute();
+//                }
+//            }catch(JSONException e1){
+//                Utils.handleException(e1, currentActivity);
+//            }
+//        }
+//
+//    });
 }
 
 private class aclUsersTask extends AsyncTask<Void, Void, JSONObject>{
@@ -161,43 +174,59 @@ private class checkPermission extends AsyncTask<Void, Void, JSONObject>{
         // Create dictionary of parameters to be passed with the request
         //HashMap<String, Object> data = new HashMap<String, Object>();
         data.put("name", accessControlListsNameField.getText().toString());
-        data.put("user_id", userId);
+        String strduserId =  new Utils().getSharedPreferenceData(AccessControlListsCheckPermission.this);
+        data.put("user_id", strduserId);
 
     }
 
     @Override
     protected JSONObject doInBackground(Void... voids){
-
         try{
             successResponse = new ACLsAPI(SdkClient.getInstance()).aCLsCheck(data.get("name").toString(), null, null,
                     data.get("user_id").toString());
 
 
-        }catch(SdkException e){
-            exceptionThrown = e;
+        }catch(Exception e){
+            e.printStackTrace();
             // handleSDKException(e, currentActivity);
         }
         return successResponse;
     }
 
     @Override
-    protected void onPostExecute(JSONObject json){
-        try{
-            if(exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")){
-                new AlertDialog.Builder(currentActivity)
-                        .setTitle("Success!").setMessage("Read Permission: "
-                                                                 + json.getJSONObject("response").getJSONObject("permission").getString("read_permission")
-                                                                 + "\nWrite Permission: " + json.getJSONObject("response").getJSONObject("permission").getString("write_permission"))
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
-            }else
-                handleSDKException(exceptionThrown, currentActivity);
+    protected void onPostExecute(JSONObject json) {
 
 
-        }catch(JSONException e){
-            e.printStackTrace();
+        if (exceptionThrown == null) {
+            try {
+
+                String strduserId = ((AxwayApplication)getApplication()).getUserId();
+
+                if (json != null) {
+                    new AlertDialog.Builder(currentActivity)
+                            .setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+                            .setPositiveButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .show();
+                } else {
+
+                    String messageStr = (strduserId != null && strduserId.length()  == 0) ?  "Please Login to get data" : "No Data Found";
+
+                    new AlertDialog.Builder(currentActivity)
+                            .setTitle("Success!").setMessage(messageStr)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        else
+        {
+            handleSDKException(exceptionThrown, currentActivity);
+        }
+
     }
 }
 
