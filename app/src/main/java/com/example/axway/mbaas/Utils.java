@@ -80,27 +80,6 @@ public class Utils {
                 .show();
 
     }
-
-
-    public void setData(Activity activity, String userId){
-
-        SharedPreferences sharedPref = activity.getSharedPreferences("myprefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-//                    editor.putString(getResources().getString(R.string.LoggedInUserId),userId);
-        editor.putString("test",userId);
-        editor.commit();
-
-    }
-
-    public String getSharedPreferenceData(Activity activity){
-        SharedPreferences sharedPref = activity.getSharedPreferences("myprefs", Context.MODE_PRIVATE);
-//                    String lgduserId = getResources().getString(R.string.LoggedInUserId);
-//                    String strduserId = sharedPref.getString(getResources().getString(R.string.LoggedInUserId),"");
-        String strduserId = sharedPref.getString("test","");
-        Log.i("UserId", strduserId);
-        return strduserId;
-
-    }
-
+    
 
 }

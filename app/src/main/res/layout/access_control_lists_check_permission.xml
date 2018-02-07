@@ -16,21 +16,30 @@
 		android:layout_alignParentTop="true"
 		android:layout_marginTop="20dp"
 		android:ems="10"
-		android:hint="Name" 
+		android:hint="Enter Acl Name"
 		android:inputType="text" >
 		
 		<requestFocus />
 	</EditText>
-	
-	<ListView
-		android:id="@+id/access_control_lists_check_permission_listView"
-		android:layout_width="match_parent"
+
+	<Button
+		android:id="@+id/access_control_lists_check_permission_button1"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"
+		android:layout_below="@+id/access_control_lists_check_permission_name_field"
+		android:layout_centerHorizontal="true"
 		android:layout_marginTop="20dp"
-		android:layout_below="@+id/access_control_lists_check_permission_name_field" >
-		
-	</ListView>
+		android:text="Check" />
+	
+	<!--<ListView-->
+		<!--android:id="@+id/access_control_lists_check_permission_listView"-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_alignParentLeft="true"-->
+		<!--android:layout_marginTop="20dp"-->
+		<!--android:layout_below="@+id/access_control_lists_check_permission_name_field" >-->
+		<!---->
+	<!--</ListView>-->
 
 </RelativeLayout>
 
