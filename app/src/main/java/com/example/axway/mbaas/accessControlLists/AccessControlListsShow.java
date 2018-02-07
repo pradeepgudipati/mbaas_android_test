@@ -26,6 +26,7 @@ import android.widget.EditText;
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.ACLsAPI;
+import com.example.axway.mbaas.AxwayApplication;
 import com.example.axway.mbaas.R;
 import com.example.axway.mbaas.Utils;
 import com.example.axway.mbaas.users.UsersLogin;
@@ -281,12 +282,8 @@ public class AccessControlListsShow extends Activity {
         protected void onPostExecute(JSONObject json) {
             if (exceptionThrown == null) {
                 try {
-//                    SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
-////                    String lgduserId = getResources().getString(R.string.LoggedInUserId);
-////                    String strduserId = sharedPref.getString(getResources().getString(R.string.LoggedInUserId),"");
-//                    String strduserId = sharedPref.getString("test","");
-
-                    String strduserId =  new Utils().getSharedPreferenceData(AccessControlListsShow.this);
+                    //Get globally store value
+                    String strduserId = ((AxwayApplication)getApplication()).getUserId();
                     if(json != null) {
                         new AlertDialog.Builder(currentActivity)
                                 .setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
@@ -297,7 +294,7 @@ public class AccessControlListsShow extends Activity {
                     else
                     {
 
-                        String messageStr = (strduserId != null && strduserId.length() > 0) ? "No Data Found" : "Please Login to get data";
+                        String messageStr = (strduserId != null && strduserId.length()  == 0) ?  "Please Login to get data" : "No Data Found";
 
                         new AlertDialog.Builder(currentActivity)
                                 .setTitle("Success!").setMessage(messageStr)
@@ -339,8 +336,8 @@ public class AccessControlListsShow extends Activity {
 
             try {
                 successResponse = new ACLsAPI(SdkClient.getInstance()).aCLsDelete(null, data.get("name").toString(), null, null);
-            } catch (SdkException e) {
-                exceptionThrown = e;
+            } catch (Exception e) {
+                e.printStackTrace();
 
             }
             return successResponse;
@@ -349,20 +346,41 @@ public class AccessControlListsShow extends Activity {
         @Override
         protected void onPostExecute(JSONObject json) {
             if (exceptionThrown == null) {
-                new AlertDialog.Builder(currentActivity)
-                        .setTitle("Success!").setMessage("Deleted!")
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
-                accessControlListsNameField.setText("");
-                selectedReadersIdList.clear();
-                selectedWritersIdList.clear();
-                readerPublicAccess = false;
-                writerPublicAccess = false;
+                String strduserId = ((AxwayApplication)getApplication()).getUserId();
+
+                if(json != null) {
+                    try {
+                        new AlertDialog.Builder(currentActivity)
+                                .setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+                                .setPositiveButton(android.R.string.ok, null)
+                                .setIcon(android.R.drawable.ic_dialog_info)
+                                .show();
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                    accessControlListsNameField.setText("");
+                    selectedReadersIdList.clear();
+                    selectedWritersIdList.clear();
+                    readerPublicAccess = false;
+                    writerPublicAccess = false;
+                }
+                else
+                {
+                    String messageStr = (strduserId != null && strduserId.length()  == 0) ?  "Please Login to get data" : "No Data Found";
+
+                    new AlertDialog.Builder(currentActivity)
+                            .setTitle("Success!").setMessage(messageStr)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .show();
+                }
 
                 removeButton5.setVisibility(View.VISIBLE);
-            } else
+            }
+            else
+            {
                 handleSDKException(exceptionThrown, currentActivity);
+            }
         }
     }
 
