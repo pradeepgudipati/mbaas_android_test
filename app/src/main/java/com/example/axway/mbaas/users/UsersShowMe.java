@@ -18,16 +18,21 @@ import android.widget.TextView;
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
 import com.axway.mbaas_preprod.apis.UsersAPI;
+import com.example.axway.mbaas.AxwayApplication;
 import com.example.axway.mbaas.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
 import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class UsersShowMe extends Activity {
     private static UsersShowMe currentActivity;
+    HashMap<String, Object> data = new HashMap<String, Object>();
+
     JSONObject successResponse;
 
     private TextView textView;
@@ -60,6 +65,8 @@ public class UsersShowMe extends Activity {
 
             textView = (TextView) findViewById(R.id.users_show_me_text_view);
             textView.setMovementMethod(new ScrollingMovementMethod());
+            String userId = ((AxwayApplication)getApplication()).getUserId();
+            data.put("user_id", userId);
             this.dialog.setMessage("Please wait");
             this.dialog.show();
 
@@ -68,7 +75,8 @@ public class UsersShowMe extends Activity {
         @Override
         protected JSONObject doInBackground(Void... voids) {
             try {
-                successResponse = new UsersAPI(SdkClient.getInstance()).usersShowMe(null, null);
+                successResponse = new UsersAPI(SdkClient.getInstance()).usersShow(data.get("user_id").toString(), null, null, null, null);
+
             } catch (SdkException e) {
                 exceptionThrown = e;
             }
