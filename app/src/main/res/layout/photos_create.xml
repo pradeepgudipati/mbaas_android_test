@@ -23,20 +23,12 @@
         android:layout_marginTop="20dp"
         android:text="Select Photo from Gallery" />
 
-    <Button
-        android:id="@+id/photos_create_camera_button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/photos_create_gallery_button1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Take Photo with Camera" />
     
     <Button
         android:id="@+id/photos_create_choose_collection_button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/photos_create_camera_button2"
+        android:layout_below="@+id/photos_create_gallery_button1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:text="Choose Collection" />

@@ -6,18 +6,25 @@
 
 package com.example.axway.mbaas.photos;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -49,7 +56,6 @@ public class PhotosCreate extends Activity {
 	private static PhotosCreate currentActivity;
 	
 	private File photoFile;
-	private String cameraPhotoPath;
 	private String parentCollectionId = null;
 	
 	private ProgressBar progressBar;
@@ -90,38 +96,7 @@ public class PhotosCreate extends Activity {
 			}
 		});
 		
-		cameraButton = (Button) findViewById(R.id.photos_create_camera_button2);
-		cameraButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (!currentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-					new AlertDialog.Builder(currentActivity)
-					.setTitle("Error").setMessage("Device has no camera")
-					.setPositiveButton(android.R.string.ok, null)
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.show();
-					return;
-				}
-				
-				Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-					
-					File tempPhotoFile = null;
-					try {
-						tempPhotoFile = createImageFile();
-					} catch (IOException ex) {
-						Utils.handleException(ex, currentActivity);
-					}
-					// Continue only if the File was successfully created
-					if (tempPhotoFile != null) {
-						// The image will be saved to the file
-						takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-								Uri.fromFile(tempPhotoFile));
-						startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-					}
-				}
-			}
-		});
+
 		
 		chooseCollectionButton = (Button) findViewById(R.id.photos_create_choose_collection_button3);
 		chooseCollectionButton.setOnClickListener(new View.OnClickListener() {
@@ -140,8 +115,42 @@ public class PhotosCreate extends Activity {
 				submitForm();
 			}
 		});
+
+
 	}
-	
+
+    public static boolean checkPermission(final Context context)
+    {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if(currentAPIVersion>=android.os.Build.VERSION_CODES.M)
+        {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context,Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+                    alertBuilder.setCancelable(true);
+                    alertBuilder.setTitle("Permission necessary");
+                    alertBuilder.setMessage("External storage permission is necessary");
+                    alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                        }
+                    });
+                    AlertDialog alert = alertBuilder.create();
+                    alert.show();
+                } else {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+
 	@Override
 	protected void onDestroy() {
 		currentActivity = null;
@@ -165,15 +174,12 @@ public class PhotosCreate extends Activity {
 			String picturePath = cursor.getString(columnIndex);
 			cursor.close();
 			photoFile = new File(picturePath);
-		} else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-			// Captured image from Camera
-			photoFile = new File(cameraPhotoPath);
-		} else if (resultCode == RESULT_OK && requestCode == REQUEST_PARENT_COLLECTION) {
+		}  else if (resultCode == RESULT_OK && requestCode == REQUEST_PARENT_COLLECTION) {
 			// Parent collection selected
 			parentCollectionId = data.getStringExtra("id");
 		}
 	}
-	
+
 	private File createImageFile() throws IOException {
 		// Create an image file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
@@ -186,8 +192,7 @@ public class PhotosCreate extends Activity {
 			storageDir		/* directory */
 		);
 
-		// Save a file path
-		cameraPhotoPath = image.getAbsolutePath();
+
 		return image;
 	}
 	
