@@ -8,6 +8,7 @@ package com.example.axway.mbaas.geoFences;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
@@ -93,7 +94,14 @@ public class GeoFencesRemove extends Activity {
 			if (exceptionThrown == null) {
 				new AlertDialog.Builder(currentActivity)
 						.setTitle("Success!").setMessage("Removed ")
-						.setPositiveButton(android.R.string.ok, null)
+						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int i) {
+								finish();
+							}
+						})
+						//.setPositiveButton(android.R.string.ok, null)
 						.setIcon(android.R.drawable.ic_dialog_info)
 						.show();
 			} else {

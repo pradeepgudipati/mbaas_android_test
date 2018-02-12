@@ -8,6 +8,7 @@ package com.example.axway.mbaas.places;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -21,7 +22,10 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.axway.mbaas_preprod.SdkClient;
@@ -65,6 +69,10 @@ public class PlacesSearch extends Activity implements  LocationListener{
 	// The minimum time between updates in milliseconds
 	private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
+	private EditText places_textField;
+
+	private Button search_button;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +80,22 @@ public class PlacesSearch extends Activity implements  LocationListener{
 		setContentView(R.layout.places_search);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		currentActivity = this;
+		places_textField = (EditText) findViewById(R.id.places_textField);
 
-		listView = (ListView) findViewById(R.id.places_search_list_view);
+		search_button = (Button)findViewById(R.id.search_button);
 
+		search_button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				hideKeyboardFrom(PlacesSearch.this, view);
+				new findPlaces().execute();
+
+
+			}
+		});
+		
 		final ArrayList<String> loadingList = new ArrayList<String>();
-		loadingList.add("Loading...");
-		Location getLoc = getLocation();
-
-		if (getLoc != null) {
-			latitude = getLoc.getLatitude();
-			longitude = getLoc.getLongitude();
-		}
-
-		new findPlaces().execute();
+		listView = (ListView) findViewById(R.id.places_search_list_view);
 		final StableArrayAdapter adapter = new StableArrayAdapter(currentActivity, android.R.layout.simple_list_item_1, loadingList);
 		listView.setAdapter(adapter);
 
@@ -105,6 +116,11 @@ public class PlacesSearch extends Activity implements  LocationListener{
 			}
 
 		});
+	}
+
+	public static void hideKeyboardFrom(Context context, View view) {
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 
 	public Location getLocation() {
@@ -303,24 +319,32 @@ public class PlacesSearch extends Activity implements  LocationListener{
 
 
 	private class findPlaces extends AsyncTask<Void, Void, JSONObject> {
-		HashMap<String, Object> data = new HashMap<String, Object>();
+		private ProgressDialog dialog = new ProgressDialog(currentActivity);
+		JSONObject dataObj = new JSONObject();
 
 		private SdkException exceptionThrown = null;
 		JSONObject successResponse;
 
 		@Override
 		protected void onPreExecute() {
-
-			data.put("latitude", latitude);
-			data.put("longitude", longitude);
+			try {
+				JSONObject text = new JSONObject();
+				text.put("$search", places_textField.getText().toString());
+				dataObj.put("$text", text);
+				this.dialog.setMessage("Please wait");
+				this.dialog.show();
+			}catch(JSONException e){
+				e.printStackTrace();
+			}
 		}
 
 		@Override
 		protected JSONObject doInBackground(Void... voids) {
 
 			try {
-				successResponse = new PlacesAPI(SdkClient.getInstance()).placesSearch(null,null,null,(Double) data.get("latitude"),
-						(Double) data.get("longitude"),null,null,null);
+				successResponse = new PlacesAPI(SdkClient.getInstance()).placesQuery(null,null,null,null,
+						dataObj.toString(),null,null,null,null,null,null);
+
 			} catch (SdkException e) {
 				exceptionThrown = e;
 			}
@@ -329,6 +353,9 @@ public class PlacesSearch extends Activity implements  LocationListener{
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
+			if (dialog.isShowing()) {
+				dialog.dismiss();
+			}
 			if (exceptionThrown == null) {
 				try {
 					places = json.getJSONObject("response").getJSONArray("places");
