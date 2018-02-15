@@ -175,7 +175,7 @@ public class AccessControlListsCreate extends Activity {
 			try {
 				if (exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")){
                     new AlertDialog.Builder(currentActivity)
-                            .setTitle("Success!").setMessage("Created!")
+                            .setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
                             .setPositiveButton(android.R.string.ok, null)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
