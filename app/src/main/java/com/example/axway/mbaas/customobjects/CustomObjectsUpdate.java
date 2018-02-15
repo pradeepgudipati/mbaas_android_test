@@ -110,7 +110,7 @@ public class CustomObjectsUpdate extends Activity {
 
 
 			int propertyCount = newPropertyValueFieldList.size();
-			for(int i = 0; i < propertyCount; i++) {
+			for(int i = 1; i < propertyCount; i++) {
 				EditText property = null;
 				property = newPropertyValueFieldList.get(i);
 				try {

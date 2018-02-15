@@ -109,7 +109,7 @@ public class UsersQuery extends Activity {
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject user = users.getJSONObject(i);
                     if (!user.get("username").toString().isEmpty())
-                        objectsList.add(user.get("username").toString() + " ");
+                        objectsList.add(user.get("username").toString());
                 }
                 if (objectsList.size() <= 0) {
                     objectsList.add("No Results!");

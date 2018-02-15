@@ -77,8 +77,8 @@ public class CustomObjectsRemove extends Activity {
 		protected JSONObject doInBackground(Void... voids) {
 
 			try {
-				successResponse = new CustomObjectsAPI(SdkClient.getInstance()).customObjectsDelete(data.get("classname").toString(),data.get("id").toString(),
-						null,null,null);
+				successResponse = new CustomObjectsAPI(SdkClient.getInstance()).customObjectsDelete(data.get("classname").toString(),"",
+						data.get("id").toString(),null,null);
 
 
 			} catch (SdkException e) {

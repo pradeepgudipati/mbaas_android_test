@@ -88,7 +88,7 @@ public class GeoFencesQuery extends Activity {
 			protected JSONObject doInBackground(Void... voids) {
 
 				try {
-					successResponse = new GeoFencesAPI(SdkClient.getInstance()).geoFencesQuery(null,null,null,null,null,null,null);
+					successResponse = new GeoFencesAPI(SdkClient.getInstance()).geoFencesQuery(null,null,50,null,null,null,null);
 				} catch (SdkException e) {
 					exceptionThrown = e;
 				}
