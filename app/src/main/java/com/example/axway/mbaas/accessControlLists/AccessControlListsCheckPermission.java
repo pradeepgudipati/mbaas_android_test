@@ -174,7 +174,7 @@ private class checkPermission extends AsyncTask<Void, Void, JSONObject>{
         // Create dictionary of parameters to be passed with the request
         //HashMap<String, Object> data = new HashMap<String, Object>();
         data.put("name", accessControlListsNameField.getText().toString());
-        String strduserId =  new Utils().getSharedPreferenceData(AccessControlListsCheckPermission.this);
+        String strduserId =  ((AxwayApplication)getApplication()).getUserId();
         data.put("user_id", strduserId);
 
     }
