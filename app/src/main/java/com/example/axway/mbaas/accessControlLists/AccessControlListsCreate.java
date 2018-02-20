@@ -108,8 +108,9 @@ public class AccessControlListsCreate extends Activity {
 		createButton3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//createACL();
-				new aclCreateTask().execute();
+				if(!TextUtils.isEmpty(accessControlListsNameField.getText().toString())) {
+					new aclCreateTask().execute();
+				}
 			}
 		});
 	}
@@ -135,7 +136,6 @@ public class AccessControlListsCreate extends Activity {
 		JSONObject successResponse;
 		HashMap<String, Object> data = new HashMap<String, Object>();
 
-		String nameStr = accessControlListsNameField.getText().toString();
 
 
 		@Override
