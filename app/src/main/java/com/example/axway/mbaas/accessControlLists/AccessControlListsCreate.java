@@ -8,6 +8,7 @@ package com.example.axway.mbaas.accessControlLists;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
@@ -107,8 +108,9 @@ public class AccessControlListsCreate extends Activity {
 		createButton3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//createACL();
-				new aclCreateTask().execute();
+				if(!TextUtils.isEmpty(accessControlListsNameField.getText().toString())) {
+					new aclCreateTask().execute();
+				}
 			}
 		});
 	}
@@ -134,7 +136,9 @@ public class AccessControlListsCreate extends Activity {
 		JSONObject successResponse;
 		HashMap<String, Object> data = new HashMap<String, Object>();
 
-			@Override
+
+
+		@Override
 		protected void onPreExecute(){
 			if (accessControlListsNameField.getText().toString().length() <= 0) {
 				accessControlListsNameField.requestFocus();
@@ -164,7 +168,7 @@ public class AccessControlListsCreate extends Activity {
 						);
 			}catch(SdkException e){
 				exceptionThrown = e;
-				handleSDKException(exceptionThrown, currentActivity);
+				e.printStackTrace();
 			}
 
 			return successResponse;
@@ -174,8 +178,8 @@ public class AccessControlListsCreate extends Activity {
 		//	Log.d("Response:", json.toString());
 			try {
 				if (exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")){
-                    new AlertDialog.Builder(currentActivity)
-                            .setTitle("Success!").setMessage("Created ACL Successfully")
+					new AlertDialog.Builder(currentActivity)
+                            .setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
                             .setPositiveButton(android.R.string.ok, null)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
