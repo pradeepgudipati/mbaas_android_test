@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
@@ -29,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleException;
@@ -114,7 +116,19 @@ public class AccessControlListsCreate extends Activity {
 			}
 		});
 	}
-	
+
+	@Override
+	protected void onResume() {
+		if((selectedReadersIdList != null && selectedReadersIdList.size() > 0 )|| (selectedWritersIdList !=null && selectedWritersIdList.size() > 0)){
+			new AlertDialog.Builder(currentActivity)
+					.setTitle("Selected").setMessage("Readers:"+ Arrays.toString(selectedReadersIdList.toArray())+"\n Writers:"+Arrays.toString(selectedWritersIdList.toArray()))
+					.setPositiveButton(android.R.string.ok, null)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.show();
+		}
+		super.onResume();
+	}
+
 	@Override
 	protected void onDestroy() {
 		currentActivity = null;
