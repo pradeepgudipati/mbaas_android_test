@@ -166,9 +166,9 @@ public class AccessControlListsCreate extends Activity {
 						data.get("public_write").toString(),
 						null
 						);
-			}catch(Exception e){
+			}catch(SdkException e){
+				exceptionThrown = e;
 				e.printStackTrace();
-				//handleSDKException(exceptionThrown, currentActivity);
 			}
 
 			return successResponse;
