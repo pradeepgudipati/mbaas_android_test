@@ -136,7 +136,7 @@ public class UsersCreate extends Activity {
 			try {
 				if (exceptionThrown == null && xml.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
 					new AlertDialog.Builder(currentActivity)
-							.setTitle("Success!").setMessage("User " + data.get("username").toString()+ "Created!!")
+							.setTitle("Success!").setMessage(xml.getJSONObject("meta").toString())
 							.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {

@@ -129,7 +129,7 @@ public class UsersLogin extends Activity {
                     ((AxwayApplication)getApplication()).setLogUserId(userId);
 
                     new AlertDialog.Builder(currentActivity)
-                            .setTitle("Success!").setMessage("Logged in! You are now logged in as " + userId)
+                            .setTitle("Success!").setMessage(xml.getJSONObject("meta").toString())
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
                                 @Override
