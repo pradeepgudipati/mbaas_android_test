@@ -1,4 +1,3 @@
-
  
 
 package com.axway.mbaas_preprod.apis;
@@ -365,7 +364,7 @@ single line (`false`). Default is `false`.
 
 		String[] authNames = new String[] { "api_key" };
 
-		Result result = client.invokeAPI(localVarPath, "post", queryParams, bodyParameter, headerParams, formParams, accept, contentType, authNames);
+		Result result = client.invokeAPI(localVarPath, "put", queryParams, bodyParameter, headerParams, formParams, accept, contentType, authNames);
 		return (JSONObject) client.deserialize(result, new TypeToken<JSONObject>() {}.getType());
 	}
 

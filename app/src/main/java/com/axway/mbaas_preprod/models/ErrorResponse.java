@@ -1,4 +1,3 @@
-
  
 
 package com.axway.mbaas_preprod.models;
@@ -12,11 +11,17 @@ import java.util.List;
 
 public class ErrorResponse {
 
-	@SerializedName("meta")
-	private String meta;
+	@SerializedName("status")
+	private String status;
 
-	@SerializedName("response")
-	private String response;
+	@SerializedName("code")
+	private Integer code;
+
+	@SerializedName("message")
+	private String message;
+
+	@SerializedName("method_name")
+	private String methodName;
 
 	public ErrorResponse() {
 	}
@@ -25,32 +30,64 @@ public class ErrorResponse {
 	 * Gets 
 	 * @return String
 	 **/
-	public String getMeta() {
-		return meta;
+	public String getStatus() {
+		return status;
 	}
 
 	/**
 	 * Sets 
 	 * @param val
 	 **/
-	public void setMeta(String val) {
-		meta = val;
+	public void setStatus(String val) {
+		status = val;
+	}
+
+	/**
+	 * Gets 
+	 * @return Integer
+	 **/
+	public Integer getCode() {
+		return code;
+	}
+
+	/**
+	 * Sets 
+	 * @param val
+	 **/
+	public void setCode(Integer val) {
+		code = val;
 	}
 
 	/**
 	 * Gets 
 	 * @return String
 	 **/
-	public String getResponse() {
-		return response;
+	public String getMessage() {
+		return message;
 	}
 
 	/**
 	 * Sets 
 	 * @param val
 	 **/
-	public void setResponse(String val) {
-		response = val;
+	public void setMessage(String val) {
+		message = val;
+	}
+
+	/**
+	 * Gets 
+	 * @return String
+	 **/
+	public String getMethodName() {
+		return methodName;
+	}
+
+	/**
+	 * Sets 
+	 * @param val
+	 **/
+	public void setMethodName(String val) {
+		methodName = val;
 	}
 
 
@@ -66,16 +103,20 @@ public class ErrorResponse {
     }
     ErrorResponse otherObj = (ErrorResponse) o;
 
-    return (this.meta == null ? otherObj.meta == null : this.meta.equals(otherObj.meta))  &&
-	 (this.response == null ? otherObj.response == null : this.response.equals(otherObj.response)) ;
+    return (this.status == null ? otherObj.status == null : this.status.equals(otherObj.status))  &&
+	 (this.code == null ? otherObj.code == null : this.code.equals(otherObj.code))  &&
+	 (this.message == null ? otherObj.message == null : this.message.equals(otherObj.message))  &&
+	 (this.methodName == null ? otherObj.methodName == null : this.methodName.equals(otherObj.methodName)) ;
 
   }
 
   @Override
   public int hashCode() {
     int result = 17;
-    result = 31 * result + (this.meta == null ? 0: this.meta.hashCode());
-    result = 31 * result + (this.response == null ? 0: this.response.hashCode());
+    result = 31 * result + (this.status == null ? 0: this.status.hashCode());
+    result = 31 * result + (this.code == null ? 0: this.code.hashCode());
+    result = 31 * result + (this.message == null ? 0: this.message.hashCode());
+    result = 31 * result + (this.methodName == null ? 0: this.methodName.hashCode());
     return result;
   }
 
