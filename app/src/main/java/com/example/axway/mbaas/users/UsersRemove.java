@@ -122,7 +122,7 @@ public class UsersRemove extends Activity {
             try {
                 if (exceptionThrown == null && successResponse.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
                     new AlertDialog.Builder(currentActivity)
-                            .setTitle("Success!").setMessage("Removed!")
+                            .setTitle("Success!").setMessage(successResponse.getJSONObject("meta").toString())
                             .setPositiveButton(android.R.string.ok, null)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
