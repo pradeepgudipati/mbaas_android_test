@@ -28,6 +28,7 @@ import com.example.axway.mbaas.Utils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static com.example.axway.mbaas.Utils.handleSDKException;
@@ -113,6 +114,17 @@ public class AccessControlListsUpdateUsers extends Activity {
 		});
 	}
 
+	@Override
+	protected void onResume() {
+		if((selectedReadersIdList != null && selectedReadersIdList.size() > 0 )|| (selectedWritersIdList !=null && selectedWritersIdList.size() > 0)){
+			new AlertDialog.Builder(currentActivity)
+					.setTitle("Selected").setMessage("Readers:"+ Arrays.toString(selectedReadersIdList.toArray())+"\n Writers:"+Arrays.toString(selectedWritersIdList.toArray()))
+					.setPositiveButton(android.R.string.ok, null)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.show();
+		}
+		super.onResume();
+	}
 	@Override
 	protected void onDestroy() {
 		currentActivity = null;
