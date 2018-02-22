@@ -60,22 +60,34 @@ public class UsersRemove extends Activity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (usernameField.getText().toString().isEmpty()) {
-                    usernameField.requestFocus();
-
-                } else {
+                if (isValidEmail(usernameField.getText().toString()))
+                {
                     try {
-                        postbody.put("username", usernameField.getText().toString());
+                        postbody.put("email", usernameField.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     submitForm();
+                } else  {
+                    usernameField.requestFocus();
+                    new AlertDialog.Builder(currentActivity)
+                            .setTitle("Alert").setMessage("Please enter valid emailId")
+                            .setPositiveButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .show();
                 }
+
             }
         });
 
     }
-
+    public final static boolean isValidEmail(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
     @Override
     protected void onDestroy() {
         currentActivity = null;
