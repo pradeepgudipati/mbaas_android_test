@@ -22,9 +22,12 @@ import com.axway.mbaas_preprod.apis.CheckinsAPI;
 import com.example.axway.mbaas.R;
 import com.example.axway.mbaas.Utils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import static com.example.axway.mbaas.Utils.handleException;
 
 public class CheckinsRemove extends Activity {
 	private static CheckinsRemove currentActivity;
@@ -89,17 +92,19 @@ public class CheckinsRemove extends Activity {
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
-			if (exceptionThrown == null) {
-				new AlertDialog.Builder(currentActivity)
-						.setTitle("Success!").setMessage("Removed! ")
-						.setPositiveButton(android.R.string.ok, null)
-						.setIcon(android.R.drawable.ic_dialog_info)
-						.show();
+			try {
+				if (exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
+					new AlertDialog.Builder(currentActivity)
+							.setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+							.setPositiveButton(android.R.string.ok, null)
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.show();
 
-				removeButton1.setVisibility(View.VISIBLE);
-
-			} else {
-				Utils.handleSDKException(exceptionThrown, currentActivity);
+					removeButton1.setVisibility(View.VISIBLE);
+				} else
+					Utils.handleSDKException(exceptionThrown, currentActivity);
+			} catch (JSONException e) {
+				handleException(e, currentActivity);
 			}
 		}
 	}

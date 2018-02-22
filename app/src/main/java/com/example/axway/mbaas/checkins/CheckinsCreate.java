@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.axway.mbaas.Utils.handleException;
+
 public class CheckinsCreate extends Activity {
 	private static CheckinsCreate currentActivity;
 
@@ -108,14 +110,17 @@ public class CheckinsCreate extends Activity {
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
-			if (exceptionThrown == null) {
-				new AlertDialog.Builder(currentActivity)
-				.setTitle("Success!").setMessage("Checked into " + placeName +"!")
-				.setPositiveButton(android.R.string.ok, null)
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.show();
-			} else {
-				Utils.handleSDKException(exceptionThrown, currentActivity);
+			try {
+				if (exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
+					new AlertDialog.Builder(currentActivity)
+							.setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+							.setPositiveButton(android.R.string.ok, null)
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.show();
+				} else
+					Utils.handleSDKException(exceptionThrown, currentActivity);
+			} catch (JSONException e) {
+				handleException(e, currentActivity);
 			}
 		}
 	}
