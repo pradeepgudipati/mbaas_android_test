@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:hint="Username"
+        android:hint="Enter EmailId"
         android:inputType="text">
 
         <requestFocus />
