@@ -116,6 +116,7 @@ public class AccessControlListsUpdateUsers extends Activity {
 
 	@Override
 	protected void onResume() {
+		//TO display alert after selection of readers or writers
 		if((selectedReadersIdList != null && selectedReadersIdList.size() > 0 )|| (selectedWritersIdList !=null && selectedWritersIdList.size() > 0)){
 			new AlertDialog.Builder(currentActivity)
 					.setTitle("Selected").setMessage("Readers:"+ Arrays.toString(selectedReadersIdList.toArray())+"\n Writers:"+Arrays.toString(selectedWritersIdList.toArray()))
