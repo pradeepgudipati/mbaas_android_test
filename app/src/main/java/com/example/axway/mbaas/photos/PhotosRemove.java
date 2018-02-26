@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.app.AlertDialog;
+
 
 import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.SdkException;
@@ -96,7 +98,12 @@ public class PhotosRemove extends Activity {
 			try {
 				if(exceptionThrown == null && xml.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok"))
 				{
-					statusLabel.setText("Removed!");
+							new AlertDialog.Builder(currentActivity)
+							.setTitle("Success!").setMessage(successResponse.getJSONObject("meta").toString())
+							.setPositiveButton(android.R.string.ok, null)
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.show();
+
 				}
 				else
 					handleSDKException(exceptionThrown,currentActivity);
