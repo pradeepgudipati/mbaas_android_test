@@ -149,7 +149,7 @@ public class PhotoCollectionsCreate extends Activity {
             } try {
                 if (exceptionThrown == null && successResponse.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
                     new AlertDialog.Builder(currentActivity)
-                            .setTitle("Success").setMessage("Created!")
+                            .setTitle("Success!").setMessage(xml.getJSONObject("meta").toString())
                             .setPositiveButton(android.R.string.ok, null)
                             .setIcon(android.R.drawable.ic_dialog_info)
                             .show();
