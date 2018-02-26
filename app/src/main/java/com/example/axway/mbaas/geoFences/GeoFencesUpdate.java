@@ -31,6 +31,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.axway.mbaas.Utils.handleException;
+import static com.example.axway.mbaas.Utils.handleSDKException;
+
 
 public class GeoFencesUpdate extends Activity {
 	private static GeoFencesUpdate currentActivity;
@@ -170,15 +173,19 @@ public class GeoFencesUpdate extends Activity {
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
-			if (exceptionThrown == null) {
-				new AlertDialog.Builder(currentActivity)
-						.setTitle("Success!").setMessage("Updated!")
-						.setPositiveButton(android.R.string.ok, null)
-						.setIcon(android.R.drawable.ic_dialog_info)
-						.show();
-				updateButton1.setVisibility(View.VISIBLE);
-			} else {
-				Utils.handleSDKException(exceptionThrown, currentActivity);
+			try {
+				if (exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
+					new AlertDialog.Builder(currentActivity)
+							.setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+							.setPositiveButton(android.R.string.ok, null)
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.show();
+					updateButton1.setVisibility(View.VISIBLE);
+
+				} else
+					handleSDKException(exceptionThrown, currentActivity);
+			} catch (JSONException e) {
+				handleException(e, currentActivity);
 			}
 		}
 	}

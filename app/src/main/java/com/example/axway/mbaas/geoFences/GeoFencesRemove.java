@@ -23,9 +23,13 @@ import com.axway.mbaas_preprod.apis.GeoFencesAPI;
 import com.example.axway.mbaas.R;
 import com.example.axway.mbaas.Utils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import static com.example.axway.mbaas.Utils.handleException;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class GeoFencesRemove extends Activity {
 	private static GeoFencesRemove currentActivity;
@@ -91,21 +95,17 @@ public class GeoFencesRemove extends Activity {
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
-			if (exceptionThrown == null) {
-				new AlertDialog.Builder(currentActivity)
-						.setTitle("Success!").setMessage("Removed ")
-						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int i) {
-								finish();
-							}
-						})
-						//.setPositiveButton(android.R.string.ok, null)
-						.setIcon(android.R.drawable.ic_dialog_info)
-						.show();
-			} else {
-				Utils.handleSDKException(exceptionThrown, currentActivity);
+			try {
+				if (exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
+					new AlertDialog.Builder(currentActivity)
+							.setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+							.setPositiveButton(android.R.string.ok, null)
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.show();
+				} else
+					handleSDKException(exceptionThrown, currentActivity);
+			} catch (JSONException e) {
+				handleException(e, currentActivity);
 			}
 		}
 	}

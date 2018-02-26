@@ -8,6 +8,7 @@ package com.example.axway.mbaas.geoFences;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +30,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.example.axway.mbaas.Utils.handleException;
+import static com.example.axway.mbaas.Utils.handleSDKException;
 
 public class GeoFencesCreate extends Activity {
 	private static GeoFencesCreate currentActivity;
@@ -147,20 +151,22 @@ public class GeoFencesCreate extends Activity {
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
-			if (exceptionThrown == null) {
-				new AlertDialog.Builder(currentActivity)
-						.setTitle("Success!").setMessage("Created ")
-						.setPositiveButton(android.R.string.ok, null)
-						.setIcon(android.R.drawable.ic_dialog_info)
-						.show();
-				geoFenceNameField.setText("");
-				geoFenceLatitudeField.setText("");
-				geoFenceLongitudeField.setText("");
-				geoFenceRadiusField.setText("");
-				createButton1.setVisibility(View.VISIBLE);
-
-			} else {
-				Utils.handleSDKException(exceptionThrown, currentActivity);
+			try {
+				if (exceptionThrown == null && json.getJSONObject("meta").get("status").toString().equalsIgnoreCase("ok")) {
+					new AlertDialog.Builder(currentActivity)
+							.setTitle("Success!").setMessage(json.getJSONObject("meta").toString())
+							.setPositiveButton(android.R.string.ok, null)
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.show();
+					geoFenceNameField.setText("");
+					geoFenceLatitudeField.setText("");
+					geoFenceLongitudeField.setText("");
+					geoFenceRadiusField.setText("");
+					createButton1.setVisibility(View.VISIBLE);
+				} else
+					handleSDKException(exceptionThrown, currentActivity);
+			} catch (JSONException e) {
+				handleException(e, currentActivity);
 			}
 		}
 	}
