@@ -105,7 +105,9 @@ public class GeoFencesQuery extends Activity {
 							JSONObject geoFence = geoFences.getJSONObject(i);
 							JSONObject payload = geoFence.getJSONObject("payload");
 							String name = payload.has("name") ? payload.getString("name") : "(null)";
-							objectsList.add(name + " " + geoFence.getJSONObject("loc").getString("coordinates"));
+							objectsList.add(name);
+//							objectsList.add(name + " " + geoFence.getJSONObject("loc").getString("coordinates"));
+
 						}
 						if (objectsList.size() <= 0) {
 							objectsList.add("No Results!");
