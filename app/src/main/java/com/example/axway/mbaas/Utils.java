@@ -80,6 +80,29 @@ public class Utils {
                 .show();
 
     }
+
+    public static void alertWarningMessage(final String e, final Activity activity, final  String alertTitle) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        activity);
+                String errMsg = e;
+                //Log.d("SDK Error Message: ", errMsg);
+                alertDialogBuilder.setTitle(alertTitle).setMessage(errMsg)
+                        .setPositiveButton(android.R.string.ok,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                       // activity.finish();
+                                    }
+                                })
+                        .show();
+            }
+        });
+
+    }
     
 
 }
