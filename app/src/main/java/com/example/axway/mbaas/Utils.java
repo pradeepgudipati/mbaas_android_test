@@ -89,15 +89,9 @@ public class Utils {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         activity);
                 String errMsg = e;
-                //Log.d("SDK Error Message: ", errMsg);
                 alertDialogBuilder.setTitle(alertTitle).setMessage(errMsg)
-                        .setPositiveButton(android.R.string.ok,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                       // activity.finish();
-                                    }
-                                })
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_info)
                         .show();
             }
         });

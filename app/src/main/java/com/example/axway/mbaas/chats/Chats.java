@@ -146,19 +146,12 @@ public class Chats extends Activity {
                                             objectsList);
                                     listView.setAdapter(adapter);
                                 } catch (JSONException e1) {
-                                  //  Utils.handleException(e1, currentActivity);
+                                    Log.d("JsonMessage", e1.toString());
                                 }
                             }
                         });
                 }catch (final SdkException e) {
                     Log.d("ErrorMessage", e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                         //   Utils.handleSDKException(e,currentActivity);
-                        }
-                    });
-
                 }
             }
 

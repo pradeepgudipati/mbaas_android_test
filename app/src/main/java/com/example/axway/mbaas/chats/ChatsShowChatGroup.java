@@ -272,7 +272,7 @@ public class ChatsShowChatGroup extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                    Utils.handleSDKException(e, currentActivity);
+                              Utils.handleSDKException(e, currentActivity);
                         }
                     });
                 }
