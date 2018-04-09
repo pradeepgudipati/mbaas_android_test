@@ -66,7 +66,7 @@ public class PhotoCollectionsCreate extends Activity {
             }
         };
 
-        nameField.setOnKeyListener(keyListener);
+        //nameField.setOnKeyListener(keyListener);
 
         chooseParentButton = (Button) findViewById(R.id.photo_collections_create_choose_parent_button1);
         chooseParentButton.setOnClickListener(new View.OnClickListener() {
