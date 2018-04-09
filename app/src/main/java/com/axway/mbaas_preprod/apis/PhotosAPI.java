@@ -135,7 +135,7 @@ single line (`false`). Default is `false`.
 		final String accept = client.selectHeaderAccept(accepts);
 
 		final String[] contentTypes = {
-			"application/x-www-form-urlencoded", "multipart/form-data"
+				"multipart/form-data", "application/x-www-form-urlencoded"
 		};
 		final String contentType = client.selectHeaderContentType(contentTypes);
 
@@ -337,7 +337,7 @@ single line (`false`). Default is `false`.
 		final String accept = client.selectHeaderAccept(accepts);
 
 		final String[] contentTypes = {
-			"application/x-www-form-urlencoded", "multipart/form-data"
+				"multipart/form-data", "application/x-www-form-urlencoded"
 		};
 		final String contentType = client.selectHeaderContentType(contentTypes);
 
