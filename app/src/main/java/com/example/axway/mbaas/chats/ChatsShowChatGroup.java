@@ -38,6 +38,9 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.example.axway.mbaas.Utils.handleException;
+import static com.example.axway.mbaas.Utils.handleSDKException;
+
 public class ChatsShowChatGroup extends Activity {
     private static ChatsShowChatGroup currentActivity;
     private HashMap<String, Object> pingData = new HashMap<String, Object>();
@@ -59,17 +62,17 @@ public class ChatsShowChatGroup extends Activity {
                  for (int i = 0; i < chats.length(); i++) {
                      tableData.add(chats.getJSONObject(i));
 
-                     if (i == 0) {
-                         // Only get new messages on next ping
-                         // NOTE: the `where` parameter of queries must be
-                         // constructed using a JSONObject
-                         JSONObject where = new JSONObject();
-                         JSONObject updatedAt = new JSONObject();
-                         updatedAt.put("$gt", chats.getJSONObject(i).getString("updated_at"));
-                         where.put("updated_at", updatedAt);
-                         pingData.put("where", where.toString());
-                         queryWhere = pingData.get("where").toString();
-                     }
+//                     if (i == 0) {
+//                         // Only get new messages on next ping
+//                         // NOTE: the `where` parameter of queries must be
+//                         // constructed using a JSONObject
+//                         JSONObject where = new JSONObject();
+//                         JSONObject updatedAt = new JSONObject();
+//                         updatedAt.put("$gt", chats.getJSONObject(i).getString("updated_at"));
+//                         where.put("updated_at", updatedAt);
+//                         pingData.put("where", where.toString());
+//                         queryWhere = pingData.get("where").toString();
+//                     }
                  }
 
                  if (currentActivity == null) {
@@ -98,9 +101,10 @@ public class ChatsShowChatGroup extends Activity {
                                      JSONObject Res = new ChatsAPI(SdkClient.getInstance()).chatsDelete(chatId, null, null);
                                      Log.d("Response of Delete", Res.toString());
                                      try {
-                                         responseHandler = (JSONObject) responseHandler.get("response");
+                                         responseHandler = (JSONObject) responseHandler.get("meta");
+                                         Utils.alertWarningMessage(responseHandler.toString(),currentActivity,"Success");
                                      } catch (JSONException e) {
-                                         e.printStackTrace();
+                                         Utils.alertWarningMessage(e.toString(),currentActivity,"Error!");
                                      }
                                  } catch (SdkException e) {
                                      Utils.handleSDKException(e, currentActivity);
@@ -135,7 +139,8 @@ public class ChatsShowChatGroup extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         currentActivity = this;
 
-        Intent intent = getIntent();
+    Intent intent = getIntent();
+
 
         if (intent.hasExtra("id")) {
             String id = intent.getStringExtra("id");
@@ -177,7 +182,7 @@ public class ChatsShowChatGroup extends Activity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            onResponse();
+                                            ping();
                                         }
                                     });
                                 }catch (SdkException e) {
@@ -233,18 +238,18 @@ public class ChatsShowChatGroup extends Activity {
 //            }
 //        }, 500, 500000000);
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                ping();
-            }
-        },500,10000);
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                ping();
+//            }
+//        },500,10000);
         ping();
     }
 
     @Override
     protected void onDestroy() {
-        timer.cancel();
+        //timer.cancel();
         currentActivity = null;
         super.onDestroy();
     }
@@ -263,8 +268,13 @@ public class ChatsShowChatGroup extends Activity {
                       }
                   });
 
-                } catch (SdkException e) {
-                    Utils.handleSDKException(e, currentActivity);
+                } catch (final SdkException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                              Utils.handleSDKException(e, currentActivity);
+                        }
+                    });
                 }
             }
         }).start();

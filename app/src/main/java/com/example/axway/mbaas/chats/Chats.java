@@ -46,7 +46,8 @@ public class Chats extends Activity {
         final ListView listView = (ListView) findViewById(R.id.chats_list_view);
 
         final ArrayList<String> loadingList = new ArrayList<String>();
-        loadingList.add("Suman - Chats Loading...");
+        loadingList.add("Query Chat Groups");
+        loadingList.add("Create new group!");
 
         final StableArrayAdapter adapter = new StableArrayAdapter(currentActivity,
                 android.R.layout.simple_list_item_1, loadingList);
@@ -73,6 +74,17 @@ public class Chats extends Activity {
                             String groupId = tableData.getJSONObject(position).getString("id");
                             Intent intent = new Intent(currentActivity, ChatsShowChatGroup.class);
                             intent.putExtra("id", groupId);
+                            startActivity(intent);
+                        }
+                    } else {
+                        if (position == 0) {
+                            // Query Chat Groups
+                            Intent intent = new Intent(currentActivity, ChatsQuery.class);
+                            startActivity(intent);
+                        } else if (position == 1) {
+                            // Create new group!
+                            Intent intent = new Intent(currentActivity,
+                                    ChatsSelectUsersForGroup.class);
                             startActivity(intent);
                         }
                     }
@@ -134,19 +146,12 @@ public class Chats extends Activity {
                                             objectsList);
                                     listView.setAdapter(adapter);
                                 } catch (JSONException e1) {
-                                    Utils.handleException(e1, currentActivity);
+                                    Log.d("JsonMessage", e1.toString());
                                 }
                             }
                         });
                 }catch (final SdkException e) {
                     Log.d("ErrorMessage", e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utils.handleSDKException(e,currentActivity);
-                        }
-                    });
-
                 }
             }
 

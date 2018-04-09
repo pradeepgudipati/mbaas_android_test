@@ -80,6 +80,23 @@ public class Utils {
                 .show();
 
     }
+
+    public static void alertWarningMessage(final String e, final Activity activity, final  String alertTitle) {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        activity);
+                String errMsg = e;
+                alertDialogBuilder.setTitle(alertTitle).setMessage(errMsg)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+            }
+        });
+
+    }
     
 
 }
