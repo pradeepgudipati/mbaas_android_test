@@ -202,7 +202,6 @@ public class ChatsShowChatGroup extends Activity {
             }
         };
 
-        messageField.setOnKeyListener(keyListener);
 
         listView = (ListView) findViewById(R.id.chats_show_chat_group_listView1);
 
