@@ -56,6 +56,7 @@ public class PhotoCollectionsSearch extends Activity {
                 currentActivity, android.R.layout.simple_list_item_1,
                 loadingList);
         listView.setAdapter(adapter);
+        new apiTask().execute();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -76,11 +77,8 @@ public class PhotoCollectionsSearch extends Activity {
 
         });
 
-
-
        /* Intent showmeintent = new Intent(currentActivity, UsersShowMe.class);
         startActivityForResult(showmeintent,100);*/
-        new apiTask().execute();
 
        }
 
@@ -89,19 +87,6 @@ public class PhotoCollectionsSearch extends Activity {
         currentActivity = null;
         super.onDestroy();
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent resuldata)
-    {
-        super.onActivityResult(requestCode, resultCode, resuldata);
-        if(requestCode==resultCode)
-        {
-            data.put("user_id", resuldata.getStringExtra("id"));
-            new apiTask().execute();
-        }
-        else
-            handleErrorInResponse("Error getting User Details, Please Check login!",currentActivity);
-    }
-
     private class apiTask extends AsyncTask<Void, Void, JSONObject> {
         private ProgressDialog dialog = new ProgressDialog(currentActivity);
 
