@@ -50,6 +50,12 @@ public class PhotoCollectionsSearch extends Activity {
         currentActivity = this;
 
         listView = (ListView) findViewById(R.id.photo_collections_search_list_view);
+        final ArrayList<String> loadingList = new ArrayList<String>();
+        loadingList.add("Loading, please wait...");
+        final StableArrayAdapter adapter = new StableArrayAdapter(
+                currentActivity, android.R.layout.simple_list_item_1,
+                loadingList);
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
