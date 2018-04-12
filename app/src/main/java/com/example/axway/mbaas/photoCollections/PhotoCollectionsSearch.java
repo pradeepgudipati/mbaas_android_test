@@ -6,12 +6,15 @@
 
 package com.example.axway.mbaas.photoCollections;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -28,6 +31,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -49,6 +56,9 @@ public class PhotoCollectionsSearch extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         currentActivity = this;
 
+        checkWritePermission();
+        checkReadPermission();
+
         listView = (ListView) findViewById(R.id.photo_collections_search_list_view);
         final ArrayList<String> loadingList = new ArrayList<String>();
         loadingList.add("Loading, please wait...");
@@ -62,8 +72,11 @@ public class PhotoCollectionsSearch extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 
+                appendLog("Item clicked...");
+
                 try {
                     if (tableData != null && tableData.length() > 0) {
+                        appendLog("Table data...." + tableData.length());
                         String collectionId = tableData.getJSONObject(position).getString("id");
                         Intent intent = new Intent(currentActivity, PhotoCollectionsShow.class);
                         intent.putExtra("id", collectionId);
@@ -143,4 +156,78 @@ public class PhotoCollectionsSearch extends Activity {
         }
 
     }
+
+    /**
+     * Used to check the sms permission granted/not
+     */
+    private void checkWritePermission() {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_DENIED) {
+                String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                requestPermissions(permissions, 100);
+
+            }
+        }
+    }
+
+    /**
+     * Used to check the sms permission granted/not
+     */
+    private void checkReadPermission() {
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_DENIED) {
+                String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                requestPermissions(permissions, 1);
+
+            }
+        }
+    }
+
+
+
+    public void appendLog(String text)
+    {
+
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+        File myDir = new File(root + "/axway");
+        myDir.mkdirs();
+
+        String fname = String.format("%s%s","axwaydebug", ".log");
+        File logFile = new File(myDir, fname);
+
+
+        if (!logFile.exists())
+        {
+            try
+            {
+
+                logFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try
+        {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(text);
+            buf.newLine();
+            buf.close();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 }
