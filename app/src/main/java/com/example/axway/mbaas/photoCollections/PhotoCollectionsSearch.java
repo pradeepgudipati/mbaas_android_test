@@ -64,18 +64,14 @@ public class PhotoCollectionsSearch extends Activity {
                 currentActivity, android.R.layout.simple_list_item_1,
                 loadingList);
         listView.setAdapter(adapter);
-        appendLog("Before api call");
-        new apiTask().execute();
+         new apiTask().execute();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 
-                appendLog("Item clicked...");
-
                 try {
                     if (tableData != null && tableData.length() > 0) {
-                        appendLog("Table data...." + tableData.length());
                         String collectionId = tableData.getJSONObject(position).getString("id");
                         Intent intent = new Intent(currentActivity, PhotoCollectionsShow.class);
                         intent.putExtra("id", collectionId);
@@ -145,7 +141,6 @@ public class PhotoCollectionsSearch extends Activity {
                             currentActivity, android.R.layout.simple_list_item_1,
                             objectsList);
                     listView.setAdapter(adapter);
-                    appendLog("After api call");
 
                 } else
                     handleSDKException(exceptionThrown, currentActivity);
@@ -157,44 +152,5 @@ public class PhotoCollectionsSearch extends Activity {
 
     }
 
-
-    public void appendLog(String text)
-    {
-
-        String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File myDir = new File(root + "/axway");
-        myDir.mkdirs();
-
-        String fname = String.format("%s%s","axwaydebug", ".log");
-        File logFile = new File(myDir, fname);
-
-
-        if (!logFile.exists())
-        {
-            try
-            {
-
-                logFile.createNewFile();
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        try
-        {
-            //BufferedWriter for performance, true to set append to file flag
-            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-            buf.append(text);
-            buf.newLine();
-            buf.close();
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
 }

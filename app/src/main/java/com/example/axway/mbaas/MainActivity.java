@@ -149,45 +149,8 @@ public class MainActivity extends LoginActivity  implements SdkOAuthTokenHelper.
 
         });
 
-
-
-        checkWritePermission();
-        checkReadPermission();
-
-
     }
 
-    /**
-     * Used to check the sms permission granted/not
-     */
-    private void checkWritePermission() {
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED) {
-                String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                requestPermissions(permissions, 100);
-
-            }
-        }
-    }
-
-    /**
-     * Used to check the sms permission granted/not
-     */
-    private void checkReadPermission() {
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED) {
-                String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE};
-                requestPermissions(permissions, 1);
-
-            }
-        }
-    }
 
     private HashMap<String, String> mapOfStringsFromJSONObject(JSONObject jsonObj) throws JSONException {
         HashMap<String, String> map = new HashMap<String, String>();
