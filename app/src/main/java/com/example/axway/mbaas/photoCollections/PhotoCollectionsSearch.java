@@ -56,8 +56,6 @@ public class PhotoCollectionsSearch extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         currentActivity = this;
 
-        checkWritePermission();
-        checkReadPermission();
 
         listView = (ListView) findViewById(R.id.photo_collections_search_list_view);
         final ArrayList<String> loadingList = new ArrayList<String>();
@@ -158,39 +156,6 @@ public class PhotoCollectionsSearch extends Activity {
         }
 
     }
-
-    /**
-     * Used to check the sms permission granted/not
-     */
-    private void checkWritePermission() {
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED) {
-                String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                requestPermissions(permissions, 100);
-
-            }
-        }
-    }
-
-    /**
-     * Used to check the sms permission granted/not
-     */
-    private void checkReadPermission() {
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED) {
-                String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                requestPermissions(permissions, 1);
-
-            }
-        }
-    }
-
 
 
     public void appendLog(String text)
