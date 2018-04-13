@@ -66,6 +66,7 @@ public class PhotoCollectionsSearch extends Activity {
                 currentActivity, android.R.layout.simple_list_item_1,
                 loadingList);
         listView.setAdapter(adapter);
+        appendLog("Before api call");
         new apiTask().execute();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -146,6 +147,7 @@ public class PhotoCollectionsSearch extends Activity {
                             currentActivity, android.R.layout.simple_list_item_1,
                             objectsList);
                     listView.setAdapter(adapter);
+                    appendLog("After api call");
 
                 } else
                     handleSDKException(exceptionThrown, currentActivity);
