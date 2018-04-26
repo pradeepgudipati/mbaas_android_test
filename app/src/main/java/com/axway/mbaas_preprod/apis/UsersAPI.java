@@ -288,6 +288,60 @@ single line (`false`). Default is `false`.
 	}
 
 	/**
+	 * Delete a User or multiple Users
+	 * A user must already be logged in to their account to delete it. Any Friends-related data and push notification subscriptions associated with the user are also deleted.
+	 * 
+	 * @param userIds Comma separated list of User IDs to delete this user on behalf of. The current login user must be an application admin to delete a user on behalf of another user. Another case is that the user can be deleted when the user_ids only contains the id of current user.
+	 * @param suId User ID to delete this user on behalf of. The current login user must be an application admin to delete a user on behalf of another user.
+	 * @param prettyJson Determines if the JSON response is formatted for readability (`true`), or displayed on a
+single line (`false`). Default is `false`.
+
+	 * @return JSONObject
+	 * @throws SdkException if fails to make API call
+	 */
+	 @SuppressWarnings("unchecked")
+	public JSONObject usersDelete(String userIds, String suId, Boolean prettyJson) throws SdkException {
+		Object bodyParameter = null;
+		if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+  		 // On UI thread.
+		    throw new SdkException(SdkException.ERROR_RUNNING_ON_UI_THREAD, "API Call is running on UI thread. Please call it inside an Async task or a thread");
+		}
+		// create path and map variables
+		String localVarPath = "/users/delete.json".replaceAll("\\{format\\}","json");
+		// query params
+		List<Pair> queryParams = new ArrayList<>();
+		Map<String, String> headerParams = new HashMap<>();
+		Map<String, Object> formParams = new HashMap<>();
+
+
+
+		if (userIds != null) formParams.put("user_ids", userIds);
+		if (suId != null) formParams.put("su_id", suId);
+		if (prettyJson != null) formParams.put("pretty_json", prettyJson);
+		
+		//If a file is being uploaded in this API then the contentType should have "multipart/form-data" only or as the first entry in the contentTypes array.
+		// Please set the order to have multipart/form-data as the first entry 
+		// e.g.   final String[] contentTypes = {
+        //             "multipart/form-data", "application/x-www-form-urlencoded"
+        //       };
+		final String[] accepts = {
+			"application/json"
+		};
+
+		final String accept = client.selectHeaderAccept(accepts);
+
+		final String[] contentTypes = {
+			"application/x-www-form-urlencoded"
+		};
+		final String contentType = client.selectHeaderContentType(contentTypes);
+
+		String[] authNames = new String[] { "api_key" };
+
+		Result result = client.invokeAPI(localVarPath, "delete", queryParams, bodyParameter, headerParams, formParams, accept, contentType, authNames);
+		return (JSONObject) client.deserialize(result, new TypeToken<JSONObject>() {}.getType());
+	}
+
+	/**
 	 * Show Current User Profile
 	 * Shows both public and private user information about the user who is
 currently logged in.

@@ -5,23 +5,18 @@ package com.axway.mbaas_preprod.apis;
 
 import android.os.Looper;
 
-import com.google.gson.reflect.TypeToken;
-
-import com.axway.mbaas_preprod.SdkException;
-import com.axway.mbaas_preprod.SdkClient;
 import com.axway.mbaas_preprod.Pair;
 import com.axway.mbaas_preprod.Result;
+import com.axway.mbaas_preprod.SdkClient;
+import com.axway.mbaas_preprod.SdkException;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONObject;
-
-import com.axway.mbaas_preprod.models.*;
-import com.google.gson.reflect.TypeToken;
 
 public class ACLsAPI {
 

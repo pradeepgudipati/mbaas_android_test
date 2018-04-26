@@ -14,13 +14,14 @@ import com.axway.mbaas_preprod.auth.SdkAuthentication;
 import com.axway.mbaas_preprod.auth.SdkHttpBasicAuth;
 import com.axway.mbaas_preprod.auth.SdkIdentityProvider;
 import com.axway.mbaas_preprod.auth.SdkOAuthHelper;
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
+
 
 import net.openid.appauth.AuthorizationRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -611,7 +612,6 @@ public class SdkClient implements SdkConstants {
                     } else {
                         request = requestBuilder.post(multiPartFormData.build()).build();
                     }
-
                 } else {
                     if (formParams != null && formParams.size() > 0 && body == null) {
                         FormBody.Builder requestBodyForm = new FormBody.Builder();
